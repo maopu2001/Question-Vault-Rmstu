@@ -1,0 +1,21 @@
+{
+  "hidefiles.configurationType": "global",
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    ".vscode/": true,
+    "client/node_modules/": true,
+    "client/components.json": true,
+    "client/pnpm-lock.yaml": true,
+    "client/postcss.config.mjs": true,
+    "client/.next/": true,
+    "node_modules/": true,
+    ".next/": true,
+    ".vercel/": true,
+    ".cph/": true,
+    "__pycache__/": true
+  }
+}
