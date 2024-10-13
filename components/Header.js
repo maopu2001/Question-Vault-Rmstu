@@ -53,7 +53,7 @@ export default function Header() {
       <h1 className="select-none text-2xl font-bold">Exam Question Dump</h1>
       <navbar className="lg:grid w-[300px] absolute right-10 hidden grid-cols-4 justify-items-center items-center font-semibold text-lg">
         <Link href="/">Home</Link>
-        <Link href="/create">Create</Link>
+        <Link href="/admin/create">Create</Link>
         <Link href="/login">Login</Link>
         <Link href="/signup">Signup</Link>
       </navbar>
@@ -73,7 +73,7 @@ export default function Header() {
             <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
               {HomeIcon} Home
             </Link>
-            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/create">
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/create">
               {CreateIcon} Create
             </Link>
             <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/login">

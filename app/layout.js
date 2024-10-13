@@ -1,6 +1,7 @@
 import Footer from '@/components/Footer';
 import './globals.css';
 import Header from '@/components/Header';
+import { Toaster } from '@/components/ui/toaster';
 
 export const metadata = {
   title: 'Exam Question Dump - RMSTU',
@@ -12,8 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <Header />
-        <main className="pt-20 pb-5">{children}</main>
+        <main className="pt-20 pb-10">{children}</main>
         <Footer />
+        <Toaster />
       </body>
     </html>
   );

@@ -44,7 +44,7 @@ export default function DownloadBox() {
   return (
     <div className="w-4/5 flex flex-col items-center gap-4 py-6 shadow-md border rounded-lg">
       <Input className="w-64" type="text" placeholder="Enter file ID" onChange={(e) => setFileId(e.target.value)} />
-      <Button className=""onClick={handleDownload} disabled={!fileId}>
+      <Button className="" onClick={handleDownload} disabled={!fileId}>
         Download
       </Button>
       {status && <p>{status}</p>}
