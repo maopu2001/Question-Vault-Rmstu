@@ -23,9 +23,23 @@ const FormSchema = z.object({
     .refine(
       (val) => {
         const [year1, year2] = val.split('-').map(Number);
-        year2 === year1 + 1;
+        return year2 === year1 + 1;
       },
       { message: 'The second year must be exactly one year after the first year.' }
+    )
+    .refine(
+      (val) => {
+        const [year1] = val.split('-').map(Number);
+        return year1 >= 2015;
+      },
+      { message: 'Session cannot be before 2015-2016.' }
+    )
+    .refine(
+      (val) => {
+        const [year1] = val.split('-').map(Number);
+        return year1 <= new Date().getFullYear();
+      },
+      { message: 'Session cannot be after the curernt year.' }
     ),
   exam: z.string().min(1, { message: 'Please select an exam.' }),
 });

@@ -8,6 +8,9 @@ import { Form } from '../ui/form';
 import FormSelectField from '../form/FormSelectField';
 import FormTextField from '../form/FormTextField';
 import { useToast } from '@/hooks/use-toast';
+import Link from 'next/link';
+import Loading from '../Loading';
+import { useRouter } from 'next/navigation';
 
 const FormSchema = z
   .object({
@@ -72,6 +75,8 @@ const departments = {
 };
 
 export default function SignUpForm() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [availableDepartments, setAvailableDepartments] = useState([]);
   const { toast } = useToast();
 
@@ -160,18 +165,41 @@ export default function SignUpForm() {
     type: 'password',
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setIsLoading(true);
+    const res = await fetch('/api/admin/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const error = await res.json();
+      setIsLoading(false);
+
+      toast({
+        title: 'Signup Failed',
+        description: error.message,
+        className: 'bg-red-500 text-white',
+      });
+      return;
+    }
+
+    setIsLoading(false);
     toast({
       title: 'User Created Successfully',
-      description: <code>{JSON.stringify(data)}</code>,
       className: 'bg-green-500 text-white',
     });
+    form.reset();
+    router.push('/login');
   };
 
   return (
     <Form {...form}>
-      <h1 className="text-2xl font-bold py-3">Create New User</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2">
+      {isLoading && <Loading />}
+      <h1 className="text-2xl font-bold pt-3 uppercase">Sign Up</h1>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2 my-3">
         <FormTextField formControl={form.control} data={nameData} />
         <FormTextField formControl={form.control} data={usernameData} />
         <FormTextField formControl={form.control} data={emailData} />
@@ -182,9 +210,15 @@ export default function SignUpForm() {
         <FormTextField formControl={form.control} data={passwordData} />
         <FormTextField formControl={form.control} data={confirmPasswordData} />
         <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
-          Create
+          Sign Up
         </Button>
       </form>
+      <p className="text-sm">
+        Already have an account?{' '}
+        <Link href="/login" className="font-bold">
+          Log In
+        </Link>
+      </p>
     </Form>
   );
 }

@@ -1,17 +1,16 @@
 import { NextResponse } from 'next/server';
 import mongoose from 'mongoose';
 import File from '@/mongoDB/schema/fileSchema';
+import connectMongo from '@/mongoDB/connectMongo';
 
-// MongoDB connection string - replace with your actual connection string
-const MONGODB_URI = process.env.MONGODB_URI;
 const FILE_SIZE_LIMIT = 16 * 1024 * 1024; // 16MB threshold
 
 export async function POST(req) {
-  let conn;
+  let connection;
   try {
     // Connect to MongoDB
 
-    conn = await mongoose.connect(MONGODB_URI);
+    connection = await connectMongo();
 
     const formData = await req.formData();
     const file = formData.get('image');
@@ -31,14 +30,14 @@ export async function POST(req) {
     }
 
     // Disconnect from MongoDB
-    await conn.disconnect();
+    await connection.disconnect();
 
     return NextResponse.json({ message: 'File uploaded and saved successfully', id: newFileId }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Error uploading file.' }, { status: 500 });
   } finally {
-    if (conn) {
-      await conn.disconnect();
+    if (connection) {
+      await connection.disconnect();
     }
   }
 }

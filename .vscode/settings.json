@@ -17,5 +17,6 @@
     ".vercel/": true,
     ".cph/": true,
     "__pycache__/": true
-  }
+  },
+  "hidefiles.selectedProfile": "Default"
 }
