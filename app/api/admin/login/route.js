@@ -37,7 +37,7 @@ export async function POST(req) {
     };
 
     cookies().set('token', token, cookieOptions);
-    return NextResponse.json({ message: 'Login successful' }, { status: 200 });
+    return NextResponse.json({ message: 'Login successful', role: payload.role }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
   }

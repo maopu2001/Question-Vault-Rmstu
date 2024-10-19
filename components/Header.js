@@ -1,7 +1,9 @@
 'use client';
+import { useToast } from '@/hooks/use-toast';
 import './navbar.css';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const MenuIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
@@ -18,6 +20,12 @@ const CloseIcon = (
 const HomeIcon = (
   <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
     <path d="M240-200h120v-240h240v240h120v-360L480-740 240-560v360Zm-80 80v-480l320-240 320 240v480H520v-240h-80v240H160Zm320-350Z" />
+  </svg>
+);
+
+const DashboardIcon = (
+  <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
   </svg>
 );
 
@@ -39,8 +47,21 @@ const SignupIcon = (
   </svg>
 );
 
+const LogoutIcon = (
+  <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M200-120q-33 0-56.5-23.5T120-200v-560q0-33 23.5-56.5T200-840h280v80H200v560h280v80H200Zm440-160-55-58 102-102H360v-80h327L585-622l55-58 200 200-200 200Z" />
+  </svg>
+);
+
 export default function Header() {
   const [sideBarRendered, setSideBarRendered] = useState(false);
+  const [role, setRole] = useState('');
+  const { toast } = useToast();
+  const router = useRouter();
+
+  useEffect(() => {
+    setRole(localStorage.getItem('role') || '');
+  }, []);
 
   const toggleSideBar = () => {
     setSideBarRendered(true);
@@ -48,14 +69,37 @@ export default function Header() {
     if (sidebar) sidebar.classList.toggle('open');
   };
 
+  const logout = async () => {
+    const res = await fetch('/api/admin/logout');
+    if (!res.ok) {
+      toast({
+        title: 'Failed to log out',
+        className: 'bg-red-500 text-white',
+      });
+      return;
+    }
+    localStorage.removeItem('role');
+    toast({
+      title: 'Logged out successfully',
+      className: 'bg-green-500 text-white',
+    });
+    window.location.href = '/login';
+  };
+
   return (
     <header className="fixed h-20 w-full flex items-center justify-center bg-primary-800 text-white p-4 top-0 z-10">
       <h1 className="select-none text-2xl font-bold">Exam Question Dump</h1>
-      <navbar className="lg:grid w-[300px] absolute right-10 hidden grid-cols-4 justify-items-center items-center font-semibold text-lg">
-        <Link href="/">Home</Link>
-        <Link href="/admin/create">Create</Link>
-        <Link href="/login">Login</Link>
-        <Link href="/signup">Signup</Link>
+      <navbar className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
+        {role === '' && <Link href="/">Home</Link>}
+        {role !== '' && <Link href="/dashboard">Dashboard</Link>}
+        {(role === 'admin' || role === 'superadmin') && <Link href="/admin/create">Create</Link>}
+        {role === '' && <Link href="/login">Login</Link>}
+        {role === '' && <Link href="/signup">Signup</Link>}
+        {role !== '' && (
+          <Link href="" onClick={logout}>
+            Logout
+          </Link>
+        )}
       </navbar>
       <button
         id="menu-icon"
@@ -70,18 +114,36 @@ export default function Header() {
             {CloseIcon}
           </button>
           <ul className="flex flex-col items-start gap-4 list-none *:w-40">
-            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
-              {HomeIcon} Home
-            </Link>
-            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/create">
-              {CreateIcon} Create
-            </Link>
-            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/login">
-              {LoginIcon} Login
-            </Link>
-            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/signup">
-              {SignupIcon} Signup
-            </Link>
+            {role === '' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
+                {HomeIcon} Home
+              </Link>
+            )}
+            {role !== '' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/dashboard">
+                {DashboardIcon} Dashboard
+              </Link>
+            )}
+            {(role === 'admin' || role === 'superadmin') && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/create">
+                {CreateIcon} Create
+              </Link>
+            )}
+            {role === '' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/login">
+                {LoginIcon} Login
+              </Link>
+            )}
+            {role === '' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/signup">
+                {SignupIcon} Signup
+              </Link>
+            )}
+            {role !== '' && (
+              <Link onClick={logout} className="flex items-center gap-2" href="">
+                {LogoutIcon} Logout
+              </Link>
+            )}
           </ul>
         </sidebar>
       )}

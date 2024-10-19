@@ -65,13 +65,19 @@ export default function test() {
       return;
     }
 
+    const resData = await res.json();
+    localStorage.setItem('role', resData.role);
+
     setIsLoading(false);
     toast({
       title: 'User Logged In Successfully',
       className: 'bg-green-500 text-white',
     });
+
     form.reset();
-    router.push('/');
+    window.location.href = '/dashboard';
+
+    // Forcing page reload to update the session cookie
   };
 
   return (

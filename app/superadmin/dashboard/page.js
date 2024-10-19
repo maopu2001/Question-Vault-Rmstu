@@ -19,7 +19,6 @@ export default function SuperAdminDashboard() {
           throw new Error(error);
         }
         const data = await res.json();
-        console.log(data.allUsers);
         setUserList([...columns, ...data.allUsers]);
       } catch (err) {
         setError(err.message);
