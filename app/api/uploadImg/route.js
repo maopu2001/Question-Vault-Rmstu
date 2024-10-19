@@ -6,11 +6,9 @@ import connectMongo from '@/mongoDB/connectMongo';
 const FILE_SIZE_LIMIT = 16 * 1024 * 1024; // 16MB threshold
 
 export async function POST(req) {
-  let connection;
   try {
     // Connect to MongoDB
-
-    connection = await connectMongo();
+    await connectMongo();
 
     const formData = await req.formData();
     const file = formData.get('image');
@@ -29,16 +27,9 @@ export async function POST(req) {
       newFileId = await saveLargeFile(file.name, file.type, file.size, buffer);
     }
 
-    // Disconnect from MongoDB
-    await connection.disconnect();
-
     return NextResponse.json({ message: 'File uploaded and saved successfully', id: newFileId }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: 'Error uploading file.' }, { status: 500 });
-  } finally {
-    if (connection) {
-      await connection.disconnect();
-    }
   }
 }
 

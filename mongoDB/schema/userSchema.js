@@ -10,6 +10,4 @@ const userSchema = new mongoose.Schema({
   session: { type: String, required: true },
 });
 
-const User = mongoose.models.User || mongoose.model('User', userSchema);
-
-export default User;
+export default mongoose.models.User || mongoose.model('User', userSchema);

@@ -14,9 +14,7 @@
     "client/.next/": true,
     "node_modules/": true,
     ".next/": true,
-    ".vercel/": true,
-    ".cph/": true,
-    "__pycache__/": true
+    ".vercel/": true
   },
   "hidefiles.selectedProfile": "Default"
 }
