@@ -17,7 +17,7 @@ export default async () => {
     };
 
     cached.promise = mongoose
-      .connect(process.env.NEXT_MONGODB_URI, opts)
+      .connect(process.env.MONGODB_URI, opts)
       .then((mongoose) => {
         return mongoose;
       })

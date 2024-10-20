@@ -1,48 +1,66 @@
 'use client';
-
 import Loading from '@/components/Loading';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useEffect, useState } from 'react';
+import InfoTable from './InfoTable';
 
 export default function SuperAdminDashboard() {
+  const [role, setRole] = useState('user');
   const [userList, setUserList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const columns = ['Role', 'Name', 'Username', 'Email', 'Degree', 'Faculty', 'Department', 'Session'];
-
   useEffect(() => {
+    setIsLoading(true);
+    const encodedToken = new TextEncoder().encode(process.env.NEXT_PUBLIC_SUPER_ADMIN_TOKEN);
     const fetchUsers = async () => {
       try {
-        const res = await fetch('/api/superadmin');
+        const res = await fetch(`/api/superadmin?role=${role}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'SuperAdmin-Token': encodedToken,
+          },
+        });
         if (!res.ok) {
           const error = await res.json();
           throw new Error(error);
         }
         const data = await res.json();
-        setUserList([...columns, ...data.allUsers]);
+        setUserList(data.filteredUsers);
+        setIsLoading(false);
       } catch (err) {
         setError(err.message);
+        setIsLoading(false);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchUsers();
-  }, []);
+  }, [role]);
 
   return (
     <div>
       {isLoading && <Loading />}
-      <h1 className="text-2xl font-bold text-center w-full">Super Admin Dashboard</h1>
+      <h1 className="text-2xl font-bold py-3 text-center w-full">Super Admin Dashboard</h1>
+      <Tabs defaultValue="user" className="flex bg-primary-100 flex-col w-full">
+        <TabsList className="bg-transparent">
+          <TabsTrigger value="user" onClick={() => setRole('user')}>
+            Users
+          </TabsTrigger>
+          <TabsTrigger value="admin" onClick={() => setRole('admin')}>
+            Administrators
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent className="flex flex-col place-items-center" value="user">
+          <h1 className="text-xl font-semibold mb-2">Users</h1>
+          <InfoTable userList={userList} />
+        </TabsContent>
+        <TabsContent className="flex flex-col place-items-center" value="admin">
+          <h1 className="text-xl font-semibold mb-2">Administrators</h1>
+          <InfoTable userList={userList} />
+        </TabsContent>
+      </Tabs>
       {error && <p>Error: {error}</p>}
-      <ul>
-        {userList.map(({ role, user }) => (
-          <li key={role}>
-            {role}
-            {JSON.stringify(user)}
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }
