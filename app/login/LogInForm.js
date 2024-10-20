@@ -3,11 +3,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
-import { Button } from '../ui/button';
-import { Form } from '../ui/form';
-import FormTextField from '../form/FormTextField';
+import { Button } from '../../components/ui/button';
+import { Form } from '../../components/ui/form';
+import FormTextField from '../../components/form/FormTextField';
 import Link from 'next/link';
-import Loading from '../Loading';
+import Loading from '../../components/ui/Loading';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 

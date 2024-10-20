@@ -7,8 +7,8 @@ import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
-import FormSelectField from './form/FormSelectField';
-import FormTextField from './form/FormTextField';
+import FormSelectField from '@/components/form/FormSelectField';
+import FormTextField from '@/components/form/FormTextField';
 
 const FormSchema = z.object({
   degree: z.string().min(1, { message: 'Please select a degree type.' }),
@@ -141,8 +141,9 @@ export default function InfoForm() {
       semester: '',
       faculty: '',
       department: '',
-      batch: '',
       courseCode: '',
+      session: '',
+      exam: '',
     },
   });
 

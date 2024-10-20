@@ -9,7 +9,7 @@ import FormSelectField from '../form/FormSelectField';
 import FormTextField from '../form/FormTextField';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
-import Loading from '../Loading';
+import Loading from '@/components/ui/Loading';
 import { useRouter } from 'next/navigation';
 
 const FormSchema = z

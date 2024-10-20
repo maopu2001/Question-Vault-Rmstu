@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
-import Loading from './Loading';
+import Loading from './ui/Loading';
 
 export default function UploadBox() {
   const [isLoading, setIsLoading] = useState(false);

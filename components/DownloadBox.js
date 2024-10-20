@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import Image from 'next/image';
-import Loading from './Loading';
+import Loading from './ui/Loading';
 
 export default function DownloadBox() {
   const [isLoading, setIsLoading] = useState(false);

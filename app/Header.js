@@ -35,6 +35,12 @@ const CreateIcon = (
   </svg>
 );
 
+const EditorIcon = (
+  <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M200-200h57l391-391-57-57-391 391v57Zm-80 80v-170l528-527q12-11 26.5-17t30.5-6q16 0 31 6t26 18l55 56q12 11 17.5 26t5.5 30q0 16-5.5 30.5T817-647L290-120H120Zm640-584-56-56 56 56Zm-141 85-28-29 57 57-29-28Z" />
+  </svg>
+);
+
 const LoginIcon = (
   <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
     <path d="M480-120v-80h280v-560H480v-80h280q33 0 56.5 23.5T840-760v560q0 33-23.5 56.5T760-120H480Zm-80-160-55-58 102-102H120v-80h327L345-622l55-58 200 200-200 200Z" />
@@ -57,7 +63,6 @@ export default function Header() {
   const [sideBarRendered, setSideBarRendered] = useState(false);
   const [role, setRole] = useState('');
   const { toast } = useToast();
-  const router = useRouter();
 
   useEffect(() => {
     setRole(localStorage.getItem('role') || '');
@@ -93,6 +98,7 @@ export default function Header() {
         {role === '' && <Link href="/">Home</Link>}
         {role !== '' && <Link href="/dashboard">Dashboard</Link>}
         {(role === 'admin' || role === 'superadmin') && <Link href="/admin/create">Create</Link>}
+        {role === 'superadmin' && <Link href="/superadmin/AcademicInfoEditor">Academic Information</Link>}
         {role === '' && <Link href="/login">Login</Link>}
         {role === '' && <Link href="/signup">Signup</Link>}
         {role !== '' && (
@@ -113,7 +119,7 @@ export default function Header() {
           <button id="close-icon" onClick={toggleSideBar} className="w-12 h-12 my-4 rounded-full p-2">
             {CloseIcon}
           </button>
-          <ul className="flex flex-col items-start gap-4 list-none *:w-40">
+          <ul className="flex flex-col items-start gap-4 list-none *:w-full">
             {role === '' && (
               <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
                 {HomeIcon} Home
@@ -127,6 +133,11 @@ export default function Header() {
             {(role === 'admin' || role === 'superadmin') && (
               <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/create">
                 {CreateIcon} Create
+              </Link>
+            )}
+            {role === 'superadmin' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/AcademicInfoEditor">
+                {EditorIcon} Academic Information
               </Link>
             )}
             {role === '' && (
