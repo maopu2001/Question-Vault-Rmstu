@@ -11,6 +11,7 @@ export default function SuperAdminDashboard() {
   const [error, setError] = useState(null);
   useEffect(() => {
     setIsLoading(true);
+    setError(null);
     const encodedToken = new TextEncoder().encode(process.env.NEXT_PUBLIC_SUPER_ADMIN_TOKEN);
     const fetchUsers = async () => {
       try {
@@ -26,6 +27,9 @@ export default function SuperAdminDashboard() {
         }
         const data = await res.json();
         setUserList(data.filteredUsers);
+        if (data.filteredUsers.length < 1) {
+          setError('Empty List');
+        }
         setIsLoading(false);
       } catch (err) {
         setError(err.message);
@@ -44,6 +48,9 @@ export default function SuperAdminDashboard() {
       <h1 className="text-2xl font-bold py-3 text-center w-full">Super Admin Dashboard</h1>
       <Tabs defaultValue="user" className="flex bg-primary-100 flex-col w-full">
         <TabsList className="bg-transparent">
+          <TabsTrigger value="adminaccess" onClick={() => setRole('request')}>
+            Permission Requests
+          </TabsTrigger>
           <TabsTrigger value="user" onClick={() => setRole('user')}>
             Users
           </TabsTrigger>
@@ -51,16 +58,19 @@ export default function SuperAdminDashboard() {
             Administrators
           </TabsTrigger>
         </TabsList>
+        <TabsContent className="flex flex-col place-items-center" value="adminaccess">
+          <h1 className="text-xl font-semibold mb-2">Requested Permission for Administrator Access</h1>
+          <InfoTable userList={userList} error={error} />
+        </TabsContent>
         <TabsContent className="flex flex-col place-items-center" value="user">
           <h1 className="text-xl font-semibold mb-2">Users</h1>
-          <InfoTable userList={userList} />
+          <InfoTable userList={userList} error={error} />
         </TabsContent>
         <TabsContent className="flex flex-col place-items-center" value="admin">
           <h1 className="text-xl font-semibold mb-2">Administrators</h1>
-          <InfoTable userList={userList} />
+          <InfoTable userList={userList} error={error} />
         </TabsContent>
       </Tabs>
-      {error && <p>Error: {error}</p>}
     </div>
   );
 }

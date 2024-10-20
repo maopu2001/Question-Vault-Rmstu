@@ -1,7 +1,6 @@
 import connectMongo from '@/mongoDB/connectMongo';
 import Auth from '@/mongoDB/schema/authSchema';
 import { NextResponse } from 'next/server';
-import User from '@/mongoDB/schema/userSchema';
 
 export async function GET(req) {
   try {
@@ -14,11 +13,17 @@ export async function GET(req) {
 
     await connectMongo();
 
-    const { searchParams } = new URL(req.url);
-    const role = searchParams.get('role');
+    const params = new URL(req.url).searchParams;
+    const role = params.get('role');
 
-    const filteredAuth = await Auth.find({ role }).populate('user');
-    const filteredUsers = filteredAuth.map((auth) => auth.user);
+    let filteredUsers;
+    if (role !== 'request') {
+      const filteredAuth = await Auth.find({ role }).populate('user');
+      filteredUsers = filteredAuth.map((auth) => auth.user);
+    } else {
+      const filteredAuth = await Auth.find({ accessrequest: true }).populate('user');
+      filteredUsers = filteredAuth.map((auth) => auth.user);
+    }
 
     return NextResponse.json({ filteredUsers }, { status: 200 });
   } catch (error) {

@@ -10,4 +10,5 @@ const fileSchema = new mongoose.Schema({
 });
 
 // Create a model from the schema
-export default mongoose.models.File || mongoose.model('File', fileSchema);
+const File = mongoose.models.File || mongoose.model('File', fileSchema);
+export default File;
