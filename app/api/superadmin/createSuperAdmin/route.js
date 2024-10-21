@@ -1,7 +1,6 @@
 import { headers } from 'next/headers';
 import { NextResponse } from 'next/server';
-import Auth from '@/mongoDB/schema/authSchema';
-import User from '@/mongoDB/schema/userSchema';
+import { Auth, User } from '@/mongoDB/indexSchema';
 import bcrypt from 'bcrypt';
 import connectMongo from '@/mongoDB/connectMongo';
 

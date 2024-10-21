@@ -6,7 +6,7 @@ import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-export default function FacultyEditor(props) {
+export default function FacultyEditor() {
   const id = 'faculty';
   const dataHeader = ['Faculty Name', 'Remove'];
   const [data, setData] = useState([]);
@@ -92,12 +92,12 @@ export default function FacultyEditor(props) {
   };
 
   return (
-    <div {...props}>
+    <div>
       {isLoading && <Loading />}
       <h1 className="text-center font-semibold text-xl">Faculty Editor</h1>
 
       <div className="min-w-[400px] w-5/6 overflow-x-auto mx-auto no-scroll p-3 border-primary-200 border-4 rounded-xl">
-        <table className="min-w-[600px] w-5/6 border-collapse text-center mx-auto" border={2}>
+        <table className="min-w-[400px] w-5/6 border-collapse text-center mx-auto" border={2}>
           <tbody>
             <tr className="*:border *:border-primary-500 *:px-1">
               {dataHeader.map((header, i) => (

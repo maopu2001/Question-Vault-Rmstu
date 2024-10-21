@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
-import File from '@/mongoDB/schema/fileSchema';
+import { File } from '@/mongoDB/indexSchema';
 import connectMongo from '@/mongoDB/connectMongo';
 
 const SIZE_LIMIT = 16 * 1024 * 1024; // 16MB threshold

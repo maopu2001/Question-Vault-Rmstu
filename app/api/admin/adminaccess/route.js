@@ -1,6 +1,6 @@
 import jwtVerify from '@/lib/jwtVerify';
 import connectMongo from '@/mongoDB/connectMongo';
-import Auth from '@/mongoDB/schema/authSchema';
+import { Auth } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {

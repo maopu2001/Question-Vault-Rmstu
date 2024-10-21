@@ -1,5 +1,5 @@
 import connectMongo from '@/mongoDB/connectMongo';
-import { Degree, Faculty } from '@/mongoDB/schema/academicInfoSchema';
+import { Degree, Department, Faculty, Semester } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
@@ -9,11 +9,32 @@ export async function GET(req) {
     try {
       await connectMongo();
       const degrees = await Degree.find({}).populate('faculty');
-      console.log(degrees);
       if (!degrees || degrees.length < 1) {
         return NextResponse.json({ data: [] }, { status: 200 });
       }
       return NextResponse.json({ data: degrees }, { status: 200 });
+    } catch (err) {
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'department') {
+    try {
+      await connectMongo();
+      const departments = await Department.find({}).populate('faculty');
+      if (!departments || departments.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: departments }, { status: 200 });
+    } catch (err) {
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'semester') {
+    try {
+      await connectMongo();
+      const semesters = await Semester.find({}).populate('degree');
+      if (!semesters || semesters.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: semesters }, { status: 200 });
     } catch (err) {
       return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
     }
@@ -57,6 +78,44 @@ export async function POST(req) {
       console.log(err);
       return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
     }
+  } else if (params.get('id') === 'department') {
+    try {
+      await connectMongo();
+      const faculty = await Faculty.findOne({ facultyName: body.formdata.faculty });
+
+      const data = {
+        ...body.formdata,
+        faculty: faculty._id,
+      };
+      await Department.create(data);
+      const departments = await Department.find({}).populate('faculty');
+      if (!departments || departments.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: departments }, { status: 200 });
+    } catch (err) {
+      console.log(err);
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'semester') {
+    try {
+      await connectMongo();
+      const degree = await Degree.findOne({ degreeCode: body.formdata.degree });
+
+      const data = {
+        ...body.formdata,
+        degree: degree._id,
+      };
+      await Semester.create(data);
+      const semesters = await Semester.find({}).populate('degree');
+      if (!semesters || semesters.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: semesters }, { status: 200 });
+    } catch (err) {
+      console.log(err);
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
   } else if (params.get('id') === 'faculty') {
     try {
       await connectMongo();
@@ -85,6 +144,30 @@ export async function DELETE(req) {
         return NextResponse.json({ data: [] }, { status: 200 });
       }
       return NextResponse.json({ data: degrees }, { status: 201 });
+    } catch (err) {
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'department') {
+    try {
+      await connectMongo();
+      await Department.deleteOne({ departmentCode: body.departmentCode });
+      const departments = await Department.find({}).populate('faculty');
+      if (!departments || departments.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: departments }, { status: 201 });
+    } catch (err) {
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'semester') {
+    try {
+      await connectMongo();
+      await Semester.deleteOne({ semester: body.semester });
+      const semesters = await Semester.find({}).populate('degree');
+      if (!semesters || semesters.length < 1) {
+        return NextResponse.json({ data: [] }, { status: 200 });
+      }
+      return NextResponse.json({ data: semesters }, { status: 201 });
     } catch (err) {
       return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
     }

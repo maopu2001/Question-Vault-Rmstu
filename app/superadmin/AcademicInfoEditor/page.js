@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import DegreeEditor from './DegreeEditor/page';
 
 export default function AcademicInfoEditor() {
   const router = new useRouter();
@@ -12,6 +11,15 @@ export default function AcademicInfoEditor() {
   const facultyHandler = () => {
     router.push('/superadmin/AcademicInfoEditor/FacultyEditor');
   };
+  const semesterHandler = () => {
+    router.push('/superadmin/AcademicInfoEditor/SemesterEditor');
+  };
+  const departmentHandler = () => {
+    router.push('/superadmin/AcademicInfoEditor/DepartmentEditor');
+  };
+  const courseHandler = () => {
+    router.push('/superadmin/AcademicInfoEditor/CourseEditor');
+  };
 
   return (
     <div>
@@ -19,11 +27,10 @@ export default function AcademicInfoEditor() {
       <div id="editorList" className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-4/5 sm:w-5/6 mx-auto">
         <Button onClick={facultyHandler}>Faculty Editor</Button>
         <Button onClick={degreeHandler}>Degree Editor</Button>
-        <Button>Department Editor</Button>
-        <Button>Semester Editor</Button>
-        <Button>Course Editor</Button>
+        <Button onClick={departmentHandler}>Department Editor</Button>
+        <Button onClick={semesterHandler}>Semester Editor</Button>
+        <Button onClick={courseHandler}>Course Editor</Button>
       </div>
-      <DegreeEditor id="degreeEditor" className="hidden" />
     </div>
   );
 }

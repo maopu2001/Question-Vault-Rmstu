@@ -1,6 +1,5 @@
 import connectMongo from '@/mongoDB/connectMongo';
-import Auth from '@/mongoDB/schema/authSchema';
-import User from '@/mongoDB/schema/userSchema';
+import { Auth, User } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
 import { cookies } from 'next/headers';

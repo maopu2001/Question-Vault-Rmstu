@@ -12,47 +12,36 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const FormSchema = z.object({
-  degreeCode: z.string().min(1, { message: 'Please enter a degree Code.' }),
-  degreeTitle: z.string().min(1, { message: 'Please enter a degree Code.' }),
-  faculty: z.string().min(1, { message: 'Please select a faculty.' }),
+  semester: z.string().min(1, { message: 'Please enter a Semester.' }),
+  degree: z.string().min(1, { message: 'Please select a Degree Type.' }),
 });
 
 export default function DegreeEditor() {
-  const id = 'degree';
-  const dataHeader = ['Degree Code', 'Degree Title', 'Faculty', 'Remove'];
+  const id = 'semester';
+  const dataHeader = ['Semester', 'Degree Type', 'Remove'];
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [faculties, setFaculties] = useState([]);
+  const [degrees, setDegrees] = useState([]);
 
-  const form = useForm(
-    { resolver: zodResolver(FormSchema) },
-    { defaultValues: { degreeCode: '', degreeTitle: '', faculty: '' } }
-  );
+  const form = useForm({ resolver: zodResolver(FormSchema) }, { defaultValues: { semester: '', degree: '' } });
 
-  const facultyData = {
+  const degreeData = {
     // label: 'Faculty',
-    name: 'faculty',
-    placeholder: 'Select a Faculty',
-    arr: faculties,
+    name: 'degree',
+    placeholder: 'Select a Degree Type',
+    arr: degrees,
   };
 
-  const degreeCodeData = {
-    // label: 'Degree Code',
-    name: 'degreeCode',
-    placeholder: 'Enter Degree Code',
-    type: 'text',
-  };
-
-  const degreeTitleData = {
-    // label: 'Degree Title',
-    name: 'degreeTitle',
-    placeholder: 'Enter Degree Title',
+  const semesterData = {
+    // label: 'Department Code',
+    name: 'semester',
+    placeholder: 'Enter a Semester',
     type: 'text',
   };
 
   useEffect(() => {
     setIsLoading(true);
-    const fetchDegree = async () => {
+    const fetchSemester = async () => {
       try {
         const res = await fetch(`/api/superadmin/AcademicInfoEditor?id=${id}`);
         if (!res.ok) {
@@ -64,24 +53,25 @@ export default function DegreeEditor() {
         console.error(err.message);
       }
     };
-    fetchDegree();
+    fetchSemester();
 
-    const fetchFaculties = async () => {
+    const fetchDegrees = async () => {
       try {
-        const res = await fetch(`/api/superadmin/AcademicInfoEditor?id=faculty`);
+        const res = await fetch(`/api/superadmin/AcademicInfoEditor?id=degree`);
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const resData = await res.json();
-        const facultyArr = resData.data.map((item) => {
-          return item.facultyName;
+        const degreeArr = resData.data.map((item) => {
+          return item.degreeCode;
         });
-        setFaculties(facultyArr);
+        console.log(degreeArr);
+        setDegrees(degreeArr);
       } catch (err) {
-        setError(err.message);
+        console.error(err.message);
       }
     };
-    fetchFaculties();
+    fetchDegrees();
     setIsLoading(false);
   }, []);
 
@@ -101,20 +91,20 @@ export default function DegreeEditor() {
       const resData = await res.json();
       setData(resData.data);
       toast({
-        title: `${formdata.degreeCode} Added Successfully`,
+        title: `${formdata.semester} Added Successfully`,
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
     } catch (err) {
       toast({
-        title: `Failed to Add ${formdata.degreeCode}`,
+        title: `Failed to Add ${formdata.semester}`,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
     }
   };
 
-  const onDelete = async (e, degreeCode) => {
+  const onDelete = async (e, semester) => {
     e.preventDefault();
     try {
       setIsLoading(true);
@@ -123,7 +113,7 @@ export default function DegreeEditor() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ degreeCode }),
+        body: JSON.stringify({ semester }),
       });
       if (!res.ok || res.status >= 400) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -131,13 +121,13 @@ export default function DegreeEditor() {
       const resData = await res.json();
       setData(resData.data);
       toast({
-        title: `${degreeCode} Removed Successfully`,
+        title: `${semester} Removed Successfully`,
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
     } catch (err) {
       toast({
-        title: `Failed to delete ${degreeCode}`,
+        title: `Failed to delete ${semester}`,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
@@ -147,7 +137,7 @@ export default function DegreeEditor() {
   return (
     <div>
       {isLoading && <Loading />}
-      <h1 className="text-center font-semibold text-xl">Degree Editor</h1>
+      <h1 className="text-center font-semibold text-xl">Semester Editor</h1>
       <div className="min-w-[400px] w-5/6 overflow-x-auto mx-auto no-scroll p-3 border-primary-200 border-4 rounded-xl">
         <Form {...form} on>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -160,11 +150,10 @@ export default function DegreeEditor() {
                 </tr>
                 {data.map((item, i) => (
                   <tr className="*:border *:border-primary-500 *:px-1" key={i}>
-                    <td>{item.degreeCode}</td>
-                    <td>{item.degreeTitle}</td>
-                    <td>{item.faculty.facultyName}</td>
+                    <td>{item.semester}</td>
+                    <td>{item.degree.degreeCode}</td>
                     <td>
-                      <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.degreeCode)}>
+                      <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.semester)}>
                         <Image src="/delete.svg" alt="Delete" width={36} height={36} />
                       </Button>
                     </td>
@@ -173,18 +162,15 @@ export default function DegreeEditor() {
 
                 <tr className="*:border *:border-primary-500 *:px-2 *:pb-2">
                   <td>
-                    <FormTextField formControl={form.control} data={degreeCodeData} />
+                    <FormTextField formControl={form.control} data={semesterData} />
                   </td>
                   <td>
-                    <FormTextField formControl={form.control} data={degreeTitleData} />
-                  </td>
-                  <td>
-                    <FormSelectField formControl={form.control} data={facultyData} />
+                    <FormSelectField formControl={form.control} data={degreeData} />
                   </td>
                   <td></td>
                 </tr>
                 <tr className="*:pt-2">
-                  <td colSpan={4}>
+                  <td colSpan={3}>
                     <Button className="w-full bg-primary-600" type="submit">
                       Submit
                     </Button>

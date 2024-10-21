@@ -12,21 +12,21 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 const FormSchema = z.object({
-  degreeCode: z.string().min(1, { message: 'Please enter a degree Code.' }),
-  degreeTitle: z.string().min(1, { message: 'Please enter a degree Code.' }),
+  departmentCode: z.string().min(1, { message: 'Please enter a department Code.' }),
+  departmentTitle: z.string().min(1, { message: 'Please enter a department Code.' }),
   faculty: z.string().min(1, { message: 'Please select a faculty.' }),
 });
 
 export default function DegreeEditor() {
-  const id = 'degree';
-  const dataHeader = ['Degree Code', 'Degree Title', 'Faculty', 'Remove'];
+  const id = 'department';
+  const dataHeader = ['Department Code', 'Department Title', 'Faculty', 'Remove'];
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [faculties, setFaculties] = useState([]);
 
   const form = useForm(
     { resolver: zodResolver(FormSchema) },
-    { defaultValues: { degreeCode: '', degreeTitle: '', faculty: '' } }
+    { defaultValues: { departmentCode: '', departmentTitle: '', faculty: '' } }
   );
 
   const facultyData = {
@@ -36,17 +36,17 @@ export default function DegreeEditor() {
     arr: faculties,
   };
 
-  const degreeCodeData = {
-    // label: 'Degree Code',
-    name: 'degreeCode',
-    placeholder: 'Enter Degree Code',
+  const departmentCodeData = {
+    // label: 'Department Code',
+    name: 'departmentCode',
+    placeholder: 'Enter Department Code',
     type: 'text',
   };
 
-  const degreeTitleData = {
-    // label: 'Degree Title',
-    name: 'degreeTitle',
-    placeholder: 'Enter Degree Title',
+  const departmentTitleData = {
+    // label: 'Department Title',
+    name: 'departmentTitle',
+    placeholder: 'Enter Department Title',
     type: 'text',
   };
 
@@ -101,20 +101,20 @@ export default function DegreeEditor() {
       const resData = await res.json();
       setData(resData.data);
       toast({
-        title: `${formdata.degreeCode} Added Successfully`,
+        title: `${formdata.departmentCode} Added Successfully`,
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
     } catch (err) {
       toast({
-        title: `Failed to Add ${formdata.degreeCode}`,
+        title: `Failed to Add ${formdata.departmentCode}`,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
     }
   };
 
-  const onDelete = async (e, degreeCode) => {
+  const onDelete = async (e, departmentCode) => {
     e.preventDefault();
     try {
       setIsLoading(true);
@@ -123,7 +123,7 @@ export default function DegreeEditor() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ degreeCode }),
+        body: JSON.stringify({ departmentCode }),
       });
       if (!res.ok || res.status >= 400) {
         throw new Error(`HTTP error! status: ${res.status}`);
@@ -131,13 +131,13 @@ export default function DegreeEditor() {
       const resData = await res.json();
       setData(resData.data);
       toast({
-        title: `${degreeCode} Removed Successfully`,
+        title: `${departmentCode} Removed Successfully`,
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
     } catch (err) {
       toast({
-        title: `Failed to delete ${degreeCode}`,
+        title: `Failed to delete ${departmentCode}`,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
@@ -147,7 +147,7 @@ export default function DegreeEditor() {
   return (
     <div>
       {isLoading && <Loading />}
-      <h1 className="text-center font-semibold text-xl">Degree Editor</h1>
+      <h1 className="text-center font-semibold text-xl">Department Editor</h1>
       <div className="min-w-[400px] w-5/6 overflow-x-auto mx-auto no-scroll p-3 border-primary-200 border-4 rounded-xl">
         <Form {...form} on>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -160,11 +160,11 @@ export default function DegreeEditor() {
                 </tr>
                 {data.map((item, i) => (
                   <tr className="*:border *:border-primary-500 *:px-1" key={i}>
-                    <td>{item.degreeCode}</td>
-                    <td>{item.degreeTitle}</td>
+                    <td>{item.departmentCode}</td>
+                    <td>{item.departmentTitle}</td>
                     <td>{item.faculty.facultyName}</td>
                     <td>
-                      <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.degreeCode)}>
+                      <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.departmentCode)}>
                         <Image src="/delete.svg" alt="Delete" width={36} height={36} />
                       </Button>
                     </td>
@@ -173,10 +173,10 @@ export default function DegreeEditor() {
 
                 <tr className="*:border *:border-primary-500 *:px-2 *:pb-2">
                   <td>
-                    <FormTextField formControl={form.control} data={degreeCodeData} />
+                    <FormTextField formControl={form.control} data={departmentCodeData} />
                   </td>
                   <td>
-                    <FormTextField formControl={form.control} data={degreeTitleData} />
+                    <FormTextField formControl={form.control} data={departmentTitleData} />
                   </td>
                   <td>
                     <FormSelectField formControl={form.control} data={facultyData} />

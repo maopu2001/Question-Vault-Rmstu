@@ -3,14 +3,14 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState, useEffect } from 'react';
-import { Button } from '../ui/button';
-import { Form } from '../ui/form';
-import FormSelectField from '../form/FormSelectField';
-import FormTextField from '../form/FormTextField';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import Loading from '@/components/ui/Loading';
 import { useRouter } from 'next/navigation';
+import FormTextField from '@/components/form/FormTextField';
+import FormSelectField from '@/components/form/FormSelectField';
 
 const FormSchema = z
   .object({
