@@ -162,7 +162,7 @@ export default function DegreeEditor() {
                   <tr className="*:border *:border-primary-500 *:px-1" key={i}>
                     <td>{item.degreeCode}</td>
                     <td>{item.degreeTitle}</td>
-                    <td>{item.faculty.facultyName}</td>
+                    <td>{item.faculty?.facultyName}</td>
                     <td>
                       <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.degreeCode)}>
                         <Image src="/delete.svg" alt="Delete" width={36} height={36} />

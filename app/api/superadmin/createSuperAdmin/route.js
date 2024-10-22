@@ -15,9 +15,8 @@ export async function GET() {
     const SUPER_ADMIN_USERNAME = process.env.SUPER_ADMIN_USERNAME;
     const SUPER_ADMIN_PASSWORD = process.env.SUPER_ADMIN_PASSWORD;
 
-    let connection;
     try {
-      connection = await connectMongo();
+      await connectMongo();
       const oldSuperAdminAuth = await Auth.findOne({ role: 'superadmin' });
       if (oldSuperAdminAuth) {
         const oldSuperAdminUser = await User.findOne({ _id: oldSuperAdminAuth.user });

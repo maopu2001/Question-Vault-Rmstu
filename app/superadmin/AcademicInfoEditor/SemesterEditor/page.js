@@ -48,6 +48,7 @@ export default function DegreeEditor() {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const resData = await res.json();
+        console.log(resData.data);
         setData(resData.data);
       } catch (err) {
         console.error(err.message);
@@ -65,7 +66,6 @@ export default function DegreeEditor() {
         const degreeArr = resData.data.map((item) => {
           return item.degreeCode;
         });
-        console.log(degreeArr);
         setDegrees(degreeArr);
       } catch (err) {
         console.error(err.message);
@@ -151,7 +151,7 @@ export default function DegreeEditor() {
                 {data.map((item, i) => (
                   <tr className="*:border *:border-primary-500 *:px-1" key={i}>
                     <td>{item.semester}</td>
-                    <td>{item.degree.degreeCode}</td>
+                    <td>{item.degree?.degreeCode}</td>
                     <td>
                       <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.semester)}>
                         <Image src="/delete.svg" alt="Delete" width={36} height={36} />

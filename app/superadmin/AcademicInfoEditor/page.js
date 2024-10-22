@@ -26,8 +26,8 @@ export default function AcademicInfoEditor() {
       <h1 className="text-center font-bold text-2xl py-2">Academic Information Editor</h1>
       <div id="editorList" className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-4/5 sm:w-5/6 mx-auto">
         <Button onClick={facultyHandler}>Faculty Editor</Button>
-        <Button onClick={degreeHandler}>Degree Editor</Button>
         <Button onClick={departmentHandler}>Department Editor</Button>
+        <Button onClick={degreeHandler}>Degree Editor</Button>
         <Button onClick={semesterHandler}>Semester Editor</Button>
         <Button onClick={courseHandler}>Course Editor</Button>
       </div>

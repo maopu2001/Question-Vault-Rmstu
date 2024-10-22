@@ -64,20 +64,9 @@ const FormSchema = z
     path: ['confirmPassword'],
   });
 
-const degrees = ['Bachelors', 'Masters', 'Ph.D'];
-
-const faculties = ['Faculty of Engineering', 'Faculty of Biological Science', 'Faculty of Business Administration'];
-
-const departments = {
-  'Faculty of Engineering': ['Computer Science and Engineering'],
-  'Faculty of Biological Science': ['Forestry and Environmental Science', 'Fisharies and Marine Resources Technology'],
-  'Faculty of Business Administration': ['Management', 'Tourism and Hospitality Management'],
-};
-
 export default function SignUpForm() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [availableDepartments, setAvailableDepartments] = useState([]);
   const { toast } = useToast();
 
   const form = useForm({
@@ -97,9 +86,61 @@ export default function SignUpForm() {
 
   const watchFaculty = form.watch('faculty');
 
+  const [faculties, setFaculties] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [degrees, setDegrees] = useState([]);
+
+  //setting faculties
   useEffect(() => {
-    if (watchFaculty && departments[watchFaculty]) setAvailableDepartments(departments[watchFaculty]);
-    else setAvailableDepartments([]);
+    const fetchFaculties = async () => {
+      try {
+        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=faculty');
+        const resData = await res.json();
+        const data = resData.data.map((item) => {
+          return item.facultyName;
+        });
+        setFaculties(data);
+      } catch (error) {
+        setFaculties([]);
+      }
+    };
+    fetchFaculties();
+  }, []);
+
+  //setting departments
+  useEffect(() => {
+    const fetchDepartments = async () => {
+      try {
+        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=department');
+        const resData = await res.json();
+        const data = resData.data.reduce((acc, item) => {
+          if (item.faculty.facultyName === watchFaculty) acc.push(item.departmentTitle);
+          return acc;
+        }, []);
+        setDepartments(data);
+      } catch (error) {
+        setDepartments([]);
+      }
+    };
+    fetchDepartments();
+  }, [watchFaculty]);
+
+  //setting degree types
+  useEffect(() => {
+    const fetchDegrees = async () => {
+      try {
+        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=degree');
+        const resData = await res.json();
+        const data = resData.data.reduce((acc, item) => {
+          if (item.faculty.facultyName === watchFaculty) acc.push(item.degreeCode);
+          return acc;
+        }, []);
+        setDegrees(data);
+      } catch (error) {
+        setDegrees([]);
+      }
+    };
+    fetchDegrees();
   }, [watchFaculty]);
 
   const nameData = {
@@ -141,7 +182,7 @@ export default function SignUpForm() {
     label: 'Department',
     name: 'department',
     placeholder: 'Select a department',
-    arr: availableDepartments,
+    arr: departments,
   };
 
   const sessionData = {
@@ -175,8 +216,8 @@ export default function SignUpForm() {
       body: JSON.stringify(data),
     });
     if (!res.ok) {
-      const error = await res.json();
       setIsLoading(false);
+      const error = await res.json();
 
       toast({
         title: 'Signup Failed',
@@ -185,14 +226,11 @@ export default function SignUpForm() {
       });
       return;
     }
-
+    const resData = await res.json();
     setIsLoading(false);
-    toast({
-      title: 'User Created Successfully',
-      className: 'bg-green-500 text-white',
-    });
     form.reset();
-    router.push('/login');
+    console.log(resData.redirect);
+    router.push(resData.redirect);
   };
 
   return (
@@ -203,9 +241,9 @@ export default function SignUpForm() {
         <FormTextField formControl={form.control} data={nameData} />
         <FormTextField formControl={form.control} data={usernameData} />
         <FormTextField formControl={form.control} data={emailData} />
-        <FormSelectField formControl={form.control} data={degreeData} />
         <FormSelectField formControl={form.control} data={facultyData} />
         <FormSelectField formControl={form.control} data={departmentData} />
+        <FormSelectField formControl={form.control} data={degreeData} />
         <FormTextField formControl={form.control} data={sessionData} />
         <FormTextField formControl={form.control} data={passwordData} />
         <FormTextField formControl={form.control} data={confirmPasswordData} />

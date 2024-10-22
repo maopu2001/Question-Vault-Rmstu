@@ -30,21 +30,18 @@ export default function DegreeEditor() {
   );
 
   const facultyData = {
-    // label: 'Faculty',
     name: 'faculty',
     placeholder: 'Select a Faculty',
     arr: faculties,
   };
 
   const departmentCodeData = {
-    // label: 'Department Code',
     name: 'departmentCode',
     placeholder: 'Enter Department Code',
     type: 'text',
   };
 
   const departmentTitleData = {
-    // label: 'Department Title',
     name: 'departmentTitle',
     placeholder: 'Enter Department Title',
     type: 'text',
@@ -151,7 +148,7 @@ export default function DegreeEditor() {
       <div className="min-w-[400px] w-5/6 overflow-x-auto mx-auto no-scroll p-3 border-primary-200 border-4 rounded-xl">
         <Form {...form} on>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-            <table className="min-w-[600px] w-5/6 border-collapse text-center mx-auto" border={2}>
+            <table className="min-w-[900px] w-5/6 border-collapse text-center mx-auto" border={2}>
               <tbody>
                 <tr className="*:border *:border-primary-500 *:px-1">
                   {dataHeader.map((header, i) => (
@@ -162,7 +159,7 @@ export default function DegreeEditor() {
                   <tr className="*:border *:border-primary-500 *:px-1" key={i}>
                     <td>{item.departmentCode}</td>
                     <td>{item.departmentTitle}</td>
-                    <td>{item.faculty.facultyName}</td>
+                    <td>{item.faculty?.facultyName}</td>
                     <td>
                       <Button className="rounded-full w-10 p-1 m-1" onClick={(e) => onDelete(e, item.departmentCode)}>
                         <Image src="/delete.svg" alt="Delete" width={36} height={36} />

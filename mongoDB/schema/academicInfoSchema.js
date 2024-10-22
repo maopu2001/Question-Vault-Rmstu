@@ -1,12 +1,11 @@
 import mongoose from 'mongoose';
 
 const courseSchema = new mongoose.Schema({
-  departmentId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Department' },
-  degree: { type: String, required: true },
-  session: { type: String, required: true },
-  semester: { type: String, required: true },
-  courseCode: { type: String, required: true },
+  courseCode: { type: String, required: true, unique: true },
   courseTitle: { type: String, required: true },
+  courseType: { type: String, required: true },
+  semester: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Semester' },
+  department: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Department' },
 });
 
 const departmentSchema = new mongoose.Schema({

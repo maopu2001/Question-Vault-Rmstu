@@ -14,7 +14,7 @@ export async function middleware(request) {
 
   const token = request.cookies.get('token')?.value;
 
-  if (nextPath === '/login' || nextPath === '/signup') {
+  if (nextPath === '/login' || nextPath === '/signup' || nextPath.startsWith('/emailverification')) {
     if (token) return NextResponse.redirect(new URL('/dashboard', request.url));
     else return NextResponse.next();
   }
