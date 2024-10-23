@@ -3,5 +3,6 @@ import Auth from './schema/authSchema';
 import User from './schema/userSchema';
 import { Course, Department, Degree, Semester, Faculty } from './schema/academicInfoSchema';
 import TempAuth from './schema/tempAuthSchema';
+import QuesInfo from './schema/quesInfoSchema';
 
-export { File, Auth, TempAuth, User, Course, Department, Degree, Semester, Faculty };
+export { File, Auth, TempAuth, User, Course, Department, Degree, Semester, Faculty, QuesInfo };

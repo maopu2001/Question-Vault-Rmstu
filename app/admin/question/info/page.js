@@ -1,4 +1,4 @@
-import QuesInfoForm from '@/app/admin/create/QuestionInfoForm';
+import QuesInfoForm from '@/app/admin/question/info/QuestionInfoForm';
 
 export const metadata = {
   title: 'Question - Exam Question Repo RMSTU',

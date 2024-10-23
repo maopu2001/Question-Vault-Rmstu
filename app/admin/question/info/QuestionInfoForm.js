@@ -1,21 +1,22 @@
 'use client';
 
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
+import FormSelectField from '@/components/form/FormSelectField';
+import FormTextField from '@/components/form/FormTextField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
 import { useToast } from '@/hooks/use-toast';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import FormSelectField from '@/components/form/FormSelectField';
-import FormTextField from '@/components/form/FormTextField';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const FormSchema = z.object({
   degree: z.string().min(1, { message: 'Please select a degree type.' }),
   semester: z.string().min(1, { message: 'Please select a semester.' }),
   faculty: z.string().min(1, { message: 'Please select a faculty.' }),
   department: z.string().min(1, { message: 'Please select a department.' }),
-  courseCode: z.string().min(1, { message: 'Please enter a course code.' }),
+  course: z.string().min(1, { message: 'Please enter a course code.' }),
   session: z
     .string()
     .min(1, { message: 'Please enter a session.' })
@@ -48,15 +49,16 @@ const exams = ['Midterm - 1', 'Midterm - 2', 'Semester Final'];
 
 export default function InfoForm() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      degree: '',
-      semester: '',
       faculty: '',
       department: '',
-      courseCode: '',
+      degree: '',
+      semester: '',
+      course: '',
       session: '',
       exam: '',
     },
@@ -72,6 +74,7 @@ export default function InfoForm() {
   const [degrees, setDegrees] = useState([]);
   const [semesters, setSemesters] = useState([]);
   const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   //setting faculties
   useEffect(() => {
@@ -159,7 +162,6 @@ export default function InfoForm() {
             acc.push(`${item.courseTitle} (${item.courseCode})`);
           return acc;
         }, []);
-        console.log(data);
         setCourses(data);
       } catch (error) {
         setCourses([]);
@@ -196,10 +198,10 @@ export default function InfoForm() {
     arr: departments,
   };
 
-  const courseCodeData = {
-    label: 'Course Code',
-    name: 'courseCode',
-    placeholder: 'Enter a Course Code',
+  const courseData = {
+    label: 'Course',
+    name: 'course',
+    placeholder: 'Select a Course',
     arr: courses,
   };
 
@@ -217,14 +219,35 @@ export default function InfoForm() {
     arr: exams,
   };
 
-  function onSubmit(data) {
-    console.log(data);
-    toast({
-      title: 'Form Submitted Successfully',
-      description: <code>{JSON.stringify(data)}</code>,
-      className: 'bg-green-500 text-white',
-    });
-  }
+  const onSubmit = async (data) => {
+    try {
+      setIsLoading(true);
+      const res = await fetch('/api/admin/question/info', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        const resData = await res.json();
+        throw Error(resData.message);
+      }
+      const resData = await res.json();
+      toast({
+        title: resData.message,
+        className: 'bg-green-500 text-white',
+      });
+      setIsLoading(false);
+      router.push(`/admin/question/upload/${resData.id}`);
+    } catch (error) {
+      toast({
+        title: error.message,
+        className: 'bg-red-500 text-white',
+      });
+      setIsLoading(false);
+    }
+  };
 
   return (
     <Form {...form}>
@@ -234,7 +257,7 @@ export default function InfoForm() {
         <FormSelectField formControl={form.control} data={departmentData} />
         <FormSelectField formControl={form.control} data={degreeData} />
         <FormSelectField formControl={form.control} data={semesterData} />
-        <FormSelectField formControl={form.control} data={courseCodeData} />
+        <FormSelectField formControl={form.control} data={courseData} />
         <FormTextField formControl={form.control} data={sessionData} />
         <FormSelectField formControl={form.control} data={examData} />
         <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">

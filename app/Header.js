@@ -99,11 +99,11 @@ export default function Header() {
 
   return (
     <header className="fixed h-20 w-full flex items-center justify-center bg-primary-800 text-white p-4 top-0 z-10">
-      <h1 className="select-none text-2xl font-bold">Exam Question Dump</h1>
+      <h1 className="select-none text-2xl font-bold">Exam Question Repo</h1>
       <navbar className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
         {role === '' && <Link href="/">Home</Link>}
         {role !== '' && <Link href="/dashboard">Dashboard</Link>}
-        {(role === 'admin' || role === 'superadmin') && <Link href="/admin/create">Create</Link>}
+        {(role === 'admin' || role === 'superadmin') && <Link href="/admin/question/info">Create</Link>}
         {role === 'superadmin' && <Link href="/superadmin/AcademicInfoEditor">Academic Information</Link>}
         {role === '' && <Link href="/login">Login</Link>}
         {role === '' && <Link href="/signup">Signup</Link>}
@@ -138,7 +138,7 @@ export default function Header() {
               </Link>
             )}
             {(role === 'admin' || role === 'superadmin') && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/create">
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/question/info">
                 {CreateIcon} Create
               </Link>
             )}
