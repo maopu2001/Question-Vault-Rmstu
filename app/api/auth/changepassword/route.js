@@ -37,6 +37,7 @@ export async function GET(req) {
       email = req.nextUrl.searchParams.get('email');
       if (!email) return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
       const user = await User.findOne({ email: email });
+      if (!user) return NextResponse.json({ message: 'User not found' }, { status: 404 });
       auth = await Auth.findOne({ user: user._id }).populate('user');
     }
 

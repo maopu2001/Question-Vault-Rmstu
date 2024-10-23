@@ -23,6 +23,7 @@ export default function DeleteAccount() {
       const res = await fetch('/api/auth/deleteaccount');
       if (!res.ok) throw new Error('Failed to delete account.');
       await fetch('/api/auth/logout');
+      if (localStorage) localStorage.removeItem('role');
       setIsLoading(false);
       toast({
         title: 'Account deleted successfully',
@@ -45,23 +46,22 @@ export default function DeleteAccount() {
 
   return (
     <Dialog>
+      {isLoading && <Loading />}
       <DialogTrigger className="bg-red-600/80 hover:bg-red-600 w-fit mx-auto py-2 px-3 rounded-lg mb-5 ">
         Delete your Account
       </DialogTrigger>
       <DialogContent className="w-1/2 min-w-[350px] rounded-lg">
         <DialogHeader>
           <DialogTitle>Delete your Account</DialogTitle>
-          <DialogDescription>This action can not be undone. Please proceed with caution.</DialogDescription>
+          <DialogDescription>
+            This action can not be undone. Please proceed with caution. To confirm deleting your account, type "Delete
+            My Account" in the textbox.
+          </DialogDescription>
         </DialogHeader>
-        <div className="mx-auto">
-          <p className="font-thin text-sm text-center">
-            To confirm deleting your account,
-            <br /> type "Delete My Account" in the textbox.
-          </p>
-          {isLoading && <Loading />}
+        <div className="mx-auto w-full">
           <Input
             onChange={(e) => setConfim(e.target.value)}
-            className="my-2"
+            className="mb-2"
             placeholder={`Type "Delete My Account" here`}
           ></Input>
           <Button onClick={onDelete} className="bg-red-700 hover:bg-red-800 w-full" disabled={isDisabled}>

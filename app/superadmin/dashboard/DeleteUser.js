@@ -1,4 +1,3 @@
-import Loading from '@/components/ui/Loading';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,52 +9,60 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import Loading from '@/components/ui/Loading';
 import { toast } from '@/hooks/use-toast';
+import Image from 'next/image';
 import { useState } from 'react';
 
-export default function RequestAdmin(props) {
-  const roleColor = props.roleColor;
+export default function DeleteUser(props) {
+  const { id } = props;
   const [isLoading, setIsLoading] = useState(false);
 
-  const requestAdmin = async () => {
-    setIsLoading(true);
+  const onDelete = async () => {
     try {
-      const res = await fetch('/api/admin/requestaccess');
+      setIsLoading(true);
+      const res = await fetch(`/api/superadmin/deleteUser?id=${id}`, {
+        method: 'DELETE',
+      });
       if (!res.ok) {
         const resData = await res.json();
-        throw new Error(resData.message);
+        throw Error(resData.message);
       }
+      const resData = await res.json();
       toast({
-        title: 'Request to access Admin sent successfully',
+        title: resData.message,
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
     } catch (error) {
       toast({
-        title: error.message || 'Failed to send request',
+        title: error.message,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
     }
   };
-
   return (
     <AlertDialog>
       {isLoading && <Loading />}
-      <AlertDialogTrigger className={`${roleColor} text-lg bg-transparent px-2 hover:bg-transparent hover:underline`}>
-        Request Admin Access
+      <AlertDialogTrigger>
+        <Button className="rounded-full w-10 p-1 m-1">
+          <Image src="/delete.svg" alt="Delete" width={36} height={36} />
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will send a request for administration access to the server.
+            This action cannot be undone. This will permanently delete this account and remove this users data from the
+            server.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={requestAdmin} className="bg-primary-600">
-            Send Request
+          <AlertDialogAction onClick={onDelete} className="bg-red-600">
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -9,6 +9,7 @@ import FormTextField from '../../components/form/FormTextField';
 import Link from 'next/link';
 import Loading from '../../components/ui/Loading';
 import { useEffect, useState } from 'react';
+import ForgotPassword from './ForgotPassword';
 
 const FormSchema = z.object({
   usernameEmail: z.string().min(1, { message: 'Please enter your username or email.' }).max(100, {
@@ -88,6 +89,7 @@ export default function test() {
           Log In
         </Button>
       </form>
+      <ForgotPassword />
       <p className="text-sm">
         New User?{' '}
         <Link href="/signup" className="font-bold">

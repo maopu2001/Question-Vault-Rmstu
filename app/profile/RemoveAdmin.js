@@ -1,14 +1,21 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { toast } from '@/hooks/use-toast';
 import Loading from '@/components/ui/Loading';
-import { Checkbox } from '@/components/ui/checkbox';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { toast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
 export default function RemoveAdmin(props) {
   const roleColor = props.roleColor;
   const [isLoading, setIsLoading] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
 
   const removeAdmin = async () => {
     try {
@@ -31,26 +38,25 @@ export default function RemoveAdmin(props) {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger className={`${roleColor} text-lg bg-transparent px-2 hover:bg-transparent hover:underline`}>
+    <AlertDialog>
+      {isLoading && <Loading />}
+      <AlertDialogTrigger className={`${roleColor} text-lg bg-transparent px-2 hover:bg-transparent hover:underline`}>
         Remove Admin Access
-      </DialogTrigger>
-      <DialogContent className="w-1/2 min-w-[350px] rounded-lg">
-        <DialogHeader>
-          <DialogTitle>Remove Administrator Access</DialogTitle>
-        </DialogHeader>
-        <div className="mx-auto">
-          {isLoading && <Loading />}
-
-          <p className="font-thin text-center mb-2">
-            <Checkbox className="mr-2" onCheckedChange={() => setIsDisabled((p) => !p)} />I accept that, I will be a
-            normal user after this.
-          </p>
-          <Button onClick={removeAdmin} className="bg-primary-600 hover:bg-primary-700 w-full" disabled={isDisabled}>
-            Remove Admin Access
-          </Button>
-        </div>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will remove your administration access permanently.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={removeAdmin} className="bg-red-600">
+            Remove
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

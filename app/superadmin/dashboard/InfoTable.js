@@ -2,6 +2,8 @@ import Loading from '@/components/ui/Loading';
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import Image from 'next/image';
+import DeleteUser from './DeleteUser';
 
 export default function InfoTable({ setReload, role, userList, error }) {
   const [isLoading, setIsLoading] = useState(false);
@@ -96,6 +98,7 @@ export default function InfoTable({ setReload, role, userList, error }) {
               <th>Session</th>
               {role !== 'admin' && <th>Make Admin</th>}
               {role === 'admin' && <th>Remove Admin</th>}
+              {role === 'user' && <th>Remove User</th>}
             </tr>
             {userList.map((user, i) => (
               <React.Fragment key={i}>
@@ -117,6 +120,11 @@ export default function InfoTable({ setReload, role, userList, error }) {
                       <Button onClick={() => removeAdmin(user._id)} className="bg-primary-500 rounded-2xl text-xs">
                         Remove Admin
                       </Button>
+                    </td>
+                  )}
+                  {role === 'user' && (
+                    <td rowSpan={2}>
+                      <DeleteUser id={user._id} />
                     </td>
                   )}
                 </tr>
