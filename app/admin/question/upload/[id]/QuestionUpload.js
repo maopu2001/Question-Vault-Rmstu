@@ -96,7 +96,16 @@ export default function QuestionUpload({ id }) {
       <Separator />
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-3">
         {Array.from({ length: totalPage }, (_, i) => i + 1).map((pageNo) => {
-          return <UploadBox pageNo={pageNo} upload={upload} setUpload={setUpload} id={id} key={pageNo} />;
+          return (
+            <UploadBox
+              pageNo={pageNo}
+              upload={upload}
+              setUpload={setUpload}
+              id={id}
+              setQuesInfo={setQuesInfo}
+              key={pageNo}
+            />
+          );
         })}
       </div>
       <Button onClick={() => setUpload(true)} className="w-1/2 min-w-[300px] my-2">

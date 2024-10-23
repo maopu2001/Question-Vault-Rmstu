@@ -11,7 +11,7 @@ const CloseIcon = (
   </svg>
 );
 
-export default function UploadBox({ pageNo, upload, setUpload, id }) {
+export default function UploadBox({ pageNo, upload, setUpload, id, setQuesInfo }) {
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
   const [newPageNo, setNewPageNo] = useState(pageNo);
@@ -37,9 +37,11 @@ export default function UploadBox({ pageNo, upload, setUpload, id }) {
         const resData = await res.json();
         throw new Error(resData.message);
       }
+      const resData = await res.json();
       setFile(null);
+      setQuesInfo(resData.quesInfo);
       setIsLoading(false);
-      setStatus('Uploaded Successfully');
+      setStatus(resData.message);
     } catch (error) {
       setStatus(error.message);
       setIsLoading(false);
@@ -55,7 +57,7 @@ export default function UploadBox({ pageNo, upload, setUpload, id }) {
 
   useEffect(() => {
     setStatus('');
-  }, []);
+  }, [file]);
 
   const handleChange = (e) => {
     const newFile = e.target.files[0];

@@ -37,7 +37,7 @@ export async function POST(req) {
 
     quesInfo.fileList.push({ pageNo, id: newFileId });
     await quesInfo.save();
-    return NextResponse.json({ message: 'File Upload Successful' }, { status: 200 });
+    return NextResponse.json({ message: 'File Upload Successful', quesInfo }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error.message || 'Something went wrong.' }, { status: 500 });
   }
