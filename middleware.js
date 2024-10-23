@@ -14,9 +14,19 @@ export async function middleware(request) {
 
   const token = request.cookies.get('token')?.value;
 
-  if (nextPath === '/login' || nextPath === '/signup' || nextPath.startsWith('/emailverification')) {
+  if (nextPath === '/login' || nextPath === '/signup') {
     if (token) return NextResponse.redirect(new URL('/dashboard', request.url));
     else return NextResponse.next();
+  }
+
+  if (nextPath === '/changepassword') {
+    try {
+      const passChangeToken = request.cookies.get('passChangeToken')?.value;
+      await jwtVerify(passChangeToken);
+      return NextResponse.next();
+    } catch (error) {
+      return NextResponse.redirect(new URL('/login', request.url));
+    }
   }
 
   if (!token) {

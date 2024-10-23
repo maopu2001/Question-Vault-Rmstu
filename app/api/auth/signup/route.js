@@ -38,7 +38,7 @@ export async function POST(req) {
       sendMail(
         email,
         'Verify - Exam Question Dump Rmstu',
-        `{req.nextUrl.origin}/emailverification/${newTempAuth._id}`,
+        `${req.nextUrl.origin}/emailverification/${newTempAuth._id}`,
         randomNumber
       );
     } catch (err) {

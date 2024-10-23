@@ -1,21 +1,6 @@
-import nodemailer from 'nodemailer';
+<html>
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASSWORD,
-  },
-});
-
-const sendMail = (receiver, subject, link, code) => {
-  const mailOptions = {
-    from: process.env.MAIL_USER,
-    to: receiver,
-    subject,
-    text: 'Verification mail',
-    html: `<html><body>
+<body>
   <div style="text-align: center; font-size: 1.125rem;">
     <h1>Exam Question Dump RMSTU</h1>
     <p>
@@ -42,18 +27,5 @@ const sendMail = (receiver, subject, link, code) => {
     <p>Ignore this mail if it's not you. Thank You</p>
   </div>
 </body>
-</html>`,
-  };
 
-  transporter
-    .sendMail(mailOptions)
-    .then(() => {
-      console.log('Verification Mail sent successfully');
-    })
-    .catch((err) => {
-      console.log('Failed to send Verification Mail', err);
-      throw err;
-    });
-};
-
-export default sendMail;
+</html>

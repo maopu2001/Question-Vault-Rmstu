@@ -14,7 +14,7 @@ export default function EmailVerification({ params }) {
   const onSubmit = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/admin/verifymail`, {
+      const res = await fetch(`/api/auth/verifymail`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -25,12 +25,15 @@ export default function EmailVerification({ params }) {
         const error = await res.json();
         throw new Error(error.message);
       }
+      const resData = await res.json();
+      console.log(resData);
       setIsLoading(false);
       toast({
         title: 'Email verification successful',
         className: 'bg-green-500 text-white',
       });
-      router.push('/login');
+      if (resData.type === 'passwordChangeRequest') router.push('/changepassword');
+      else router.push('/login');
     } catch (error) {
       setIsLoading(false);
       toast({
@@ -44,7 +47,7 @@ export default function EmailVerification({ params }) {
   const resendMail = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`/api/admin/verifymail?id=${params.id}`);
+      const res = await fetch(`/api/auth/verifymail?id=${params.id}`);
       if (!res.ok) {
         const error = await res.json();
         throw new Error(error.message);
@@ -65,11 +68,12 @@ export default function EmailVerification({ params }) {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center w-4/5 mx-auto">
       {isLoading && <Loading />}
       <h1 className="text-center font-bold text-2xl py-2"> Email Verification</h1>
       <p className="text-lg text-center">
-        An email has been sent to your email account. Please, check your inbox and input the 6 digit code here.
+        An email has been sent to your email account. Please, check your inbox and input the 6 digit OTP here. The OTP
+        will expire in 24 hours.
       </p>
       <Input
         onChange={(e) => setRandomNumber(e.target.value)}

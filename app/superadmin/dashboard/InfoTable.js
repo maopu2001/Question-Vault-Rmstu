@@ -10,7 +10,7 @@ export default function InfoTable({ setReload, role, userList, error }) {
   const makeAdmin = async (id) => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/admin/adminaccess', {
+      const res = await fetch('/api/superadmin/adminaccess', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default function InfoTable({ setReload, role, userList, error }) {
   const removeAdmin = async (id) => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/admin/adminaccess', {
+      const res = await fetch('/api/superadmin/adminaccess', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

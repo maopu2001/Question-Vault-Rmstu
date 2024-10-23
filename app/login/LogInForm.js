@@ -8,8 +8,7 @@ import { Form } from '../../components/ui/form';
 import FormTextField from '../../components/form/FormTextField';
 import Link from 'next/link';
 import Loading from '../../components/ui/Loading';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 const FormSchema = z.object({
   usernameEmail: z.string().min(1, { message: 'Please enter your username or email.' }).max(100, {
@@ -19,7 +18,6 @@ const FormSchema = z.object({
 });
 
 export default function test() {
-  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -46,8 +44,9 @@ export default function test() {
   };
 
   const onSubmit = async (data) => {
+    console.log(data);
     setIsLoading(true);
-    const res = await fetch('/api/admin/login', {
+    const res = await fetch('/api/auth/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -76,8 +75,6 @@ export default function test() {
 
     form.reset();
     window.location.href = '/dashboard';
-
-    // Forcing page reload to update the session cookie
   };
 
   return (

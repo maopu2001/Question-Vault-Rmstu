@@ -208,7 +208,7 @@ export default function SignUpForm() {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const res = await fetch('/api/admin/signup', {
+    const res = await fetch('/api/auth/signup', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -237,6 +237,9 @@ export default function SignUpForm() {
     <Form {...form}>
       {isLoading && <Loading />}
       <h1 className="text-2xl font-bold pt-3 uppercase">Sign Up</h1>
+      <p className="w-1/2 min-w-96 text-center text-primary-400 font-semibold text-sm">
+        Note: These informations can not be changed after creating the account. Please, be extra careful.
+      </p>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2 my-3">
         <FormTextField formControl={form.control} data={nameData} />
         <FormTextField formControl={form.control} data={usernameData} />
