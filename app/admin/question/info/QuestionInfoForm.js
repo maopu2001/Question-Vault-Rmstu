@@ -4,6 +4,7 @@ import FormSelectField from '@/components/form/FormSelectField';
 import FormTextField from '@/components/form/FormTextField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
+import Loading from '@/components/ui/Loading';
 import { useToast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -220,8 +221,8 @@ export default function InfoForm() {
   };
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
       const res = await fetch('/api/admin/question/info', {
         method: 'POST',
         headers: {
@@ -251,6 +252,7 @@ export default function InfoForm() {
 
   return (
     <Form {...form}>
+      {isLoading && <Loading />}
       <h1 className="text-2xl font-bold py-3">Question Information</h1>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2">
         <FormSelectField formControl={form.control} data={facultyData} />
