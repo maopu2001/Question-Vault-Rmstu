@@ -1,7 +1,6 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import Loading from '@/components/ui/Loading';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -11,53 +10,42 @@ const CloseIcon = (
   </svg>
 );
 
-export default function UploadBox({ pageNo, upload, setUpload, id, setQuesInfo }) {
-  const [isLoading, setIsLoading] = useState(false);
+export default function UploadBox({ pageNo, upload, setUpload, id, setUploadFinished }) {
   const [file, setFile] = useState(null);
   const [newPageNo, setNewPageNo] = useState(pageNo);
-  const [status, setStatus] = useState('');
   const [image, setImage] = useState(null);
-
-  const handleUpload = async () => {
-    // console.log(newPageNo + ': ' + file?.name);
-
-    const formData = new FormData();
-    formData.append('image', file);
-    formData.append('pageNo', newPageNo);
-    formData.append('id', id);
-
-    try {
-      setIsLoading(true);
-      setStatus('Uploading...');
-      const res = await fetch('/api/admin/question/upload', {
-        method: 'POST',
-        body: formData,
-      });
-      if (!res.ok) {
-        const resData = await res.json();
-        throw new Error(resData.message);
-      }
-      const resData = await res.json();
-      setFile(null);
-      setQuesInfo(resData.quesInfo);
-      setIsLoading(false);
-      setStatus(resData.message);
-    } catch (error) {
-      setStatus(error.message);
-      setIsLoading(false);
-    }
-  };
+  const [isUploaded, setIsUploaded] = useState(false);
 
   useEffect(() => {
-    if (upload) {
+    const handleUpload = async () => {
+      const formData = new FormData();
+      formData.append('image', file);
+      formData.append('pageNo', newPageNo);
+      formData.append('id', id);
+
+      try {
+        const res = await fetch('/api/admin/question/upload', {
+          method: 'POST',
+          body: formData,
+        });
+        if (!res.ok) {
+          const resData = await res.json();
+          throw new Error(resData.message);
+        }
+        setFile(null);
+        setIsUploaded(true);
+        setUploadFinished((p) => p + 1);
+      } catch (error) {
+        setUploadFinished((p) => p + 1);
+        console.log(error.message);
+      }
+    };
+
+    if (upload > 0 && !isUploaded) {
       handleUpload();
-      setUpload(false);
+      setUpload((p) => p - 1);
     }
   }, [upload]);
-
-  useEffect(() => {
-    setStatus('');
-  }, [file]);
 
   const handleChange = (e) => {
     const newFile = e.target.files[0];
@@ -70,12 +58,10 @@ export default function UploadBox({ pageNo, upload, setUpload, id, setQuesInfo }
 
   const removeFile = () => {
     setFile(null);
-    setStatus('');
   };
 
   return (
     <div className="min-w-[330px] w-full min-h-[330px] h-full flex flex-col items-center gap-4 p-4 border rounded-lg shadow-md m-auto">
-      {isLoading && <Loading />}
       <div className="relative w-full">
         <h1 className="font-bold text-2xl flex w-fit mx-auto">
           Page no -{' '}
@@ -84,12 +70,14 @@ export default function UploadBox({ pageNo, upload, setUpload, id, setQuesInfo }
             defaultValue={pageNo}
             onChange={(e) => setNewPageNo(e.target.value)}
           ></Input>
-          <Button
-            onClick={removeFile}
-            className="absolute right-0 bg-transparent hover:bg-primary-700/40 rounded-full p-2"
-          >
-            {CloseIcon}
-          </Button>
+          {file && (
+            <Button
+              onClick={removeFile}
+              className="absolute right-0 bg-transparent hover:bg-primary-700/40 rounded-full p-2"
+            >
+              {CloseIcon}
+            </Button>
+          )}
         </h1>
       </div>
       <div className="w-5/6 h-3/4 border-2 rounded-xl">
@@ -113,7 +101,6 @@ export default function UploadBox({ pageNo, upload, setUpload, id, setQuesInfo }
           </div>
         )}
       </div>
-      {status && status}
     </div>
   );
 }

@@ -7,7 +7,7 @@ export async function GET(req) {
   const token = req.cookies.get('token')?.value;
   if (!token) return NextResponse.json({ message: 'Token not found' }, { status: 404 });
   try {
-    const payload = await jwtVerify(token);
+    const payload = await jwtVerify(token, process.env.JWT_SECRET);
     await connectMongo();
     const auth = await Auth.findById(payload.id);
     if (!auth) return NextResponse.json({ message: 'Id not found' }, { status: 404 });

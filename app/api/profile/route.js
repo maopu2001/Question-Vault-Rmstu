@@ -8,7 +8,7 @@ export async function GET(req) {
   if (!token) {
     return NextResponse.json({ message: 'Token not found' }, { status: 404 });
   }
-  const payload = await jwtVerify(token);
+  const payload = await jwtVerify(token, process.env.JWT_SECRET);
 
   if (!payload) {
     return NextResponse.json({ message: 'Invalid token' }, { status: 401 });

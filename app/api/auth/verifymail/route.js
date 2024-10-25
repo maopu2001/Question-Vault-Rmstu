@@ -39,7 +39,7 @@ export async function POST(req) {
         id: auth._id,
       };
 
-      const passChangeToken = await jwtSign(payload, { expirationTime: '15min' });
+      const passChangeToken = await jwtSign(payload, process.env.JWT_SECRET, { expirationTime: '15min' });
 
       const cookieOptions = {
         httpOnly: true,

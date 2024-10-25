@@ -6,17 +6,34 @@ import { useEffect, useReducer, useState } from 'react';
 import UploadBox from './UploadBox';
 import Loading from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/separator';
+import PreviewImage from '@/components/PreviewImage';
+import { useRouter } from 'next/navigation';
+import { toast } from '@/hooks/use-toast';
+import DeleteQuestion from './DeleteQuestion';
 
 export default function QuestionUpload({ id }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [totalPage, setTotalPage] = useState(1);
-  const [upload, setUpload] = useState(false);
+  const [totalPage, setTotalPage] = useState(0);
+  const [upload, setUpload] = useState(0);
+  const [uploadFinished, setUploadFinished] = useState(0);
   const [quesInfo, setQuesInfo] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchQuesInfo = async () => {
       try {
         const res = await fetch(`/api/admin/question/info?id=${id}`);
+
+        if (res.status === 400) {
+          const resData = await res.json();
+          setIsLoading(false);
+          toast({
+            title: resData.message,
+            className: 'bg-red-500 text-white',
+          });
+          router.push('/admin/question/info');
+        }
         if (!res.ok) {
           const resData = await res.json();
           throw new Error(resData.message);
@@ -33,16 +50,29 @@ export default function QuestionUpload({ id }) {
     fetchQuesInfo();
   }, []);
 
+  const previewImg = (quesId, pageNo) => {
+    setPreview({ quesId, pageNo });
+  };
+
+  useEffect(() => {
+    if (uploadFinished === totalPage && uploadFinished !== 0 && totalPage !== 0) {
+      setIsLoading(false);
+      setTotalPage(0);
+      window.location.reload();
+    }
+  }, [uploadFinished]);
+
   return (
     <div className="w-5/6 flex flex-col items-center justify-center gap-2 mx-auto">
       {isLoading && <Loading />}
+      {preview && <PreviewImage data={preview} setPreview={setPreview} />}
       <div>
         <h1 className="text-center text-2xl font-bold mb-2">Question's Information</h1>
         <table>
           <tbody>
             {quesInfo &&
               Object.keys(quesInfo).map((item, i) => {
-                if (item === 'fileList' || item === '_id' || item === '__v') return null;
+                if (item === 'createdBy' || item === 'fileList' || item === '_id' || item === '__v') return null;
                 return (
                   <tr key={i}>
                     <td className="capitalize font-semibold pr-2">{item}</td>
@@ -51,14 +81,37 @@ export default function QuestionUpload({ id }) {
                   </tr>
                 );
               })}
+            {quesInfo && quesInfo.createdBy && (
+              <tr>
+                <td className="capitalize font-semibold pr-2" valign="top">
+                  Created By
+                </td>
+                <td className="w-3 font-semibold" valign="top">
+                  :
+                </td>
+                <td>
+                  {' '}
+                  {quesInfo.createdBy.name} <br />
+                  Department: {quesInfo.createdBy.department} <br />
+                  Session: {quesInfo.createdBy.session}
+                </td>
+              </tr>
+            )}
             {quesInfo && quesInfo.fileList && quesInfo.fileList.length > 0 && (
               <tr>
                 <td className="capitalize font-semibold pr-2">Pages</td>
                 <td className="w-3 font-semibold">:</td>
                 <td>
                   {quesInfo.fileList.map((item, i) => {
-                    if (i === quesInfo.fileList.length - 1) return `${item.pageNo}.`;
-                    return `${item.pageNo}, `;
+                    return (
+                      <Button
+                        className="mx-1 rounded-full bg-primary-500"
+                        onClick={() => previewImg(quesInfo._id, item.pageNo)}
+                        key={i}
+                      >
+                        {item.pageNo}
+                      </Button>
+                    );
                   })}
                 </td>
               </tr>
@@ -66,18 +119,24 @@ export default function QuestionUpload({ id }) {
           </tbody>
         </table>
       </div>
+      <div className="w-full flex mt-2">
+        <DeleteQuestion quesId={id} />
+      </div>
       {quesInfo && (
-        <h1 className="text-center text-2xl font-bold mb-2">
-          {quesInfo.fileList.length > 0 && 'Editing...'}
-          {quesInfo.fileList.length === 0 && 'Creating...'}
-        </h1>
+        <div className="w-full">
+          <Separator />
+          <h1 className="text-center text-2xl font-bold my-2">
+            {quesInfo.fileList.length > 0 && 'Start Editing'}
+            {quesInfo.fileList.length === 0 && 'Start Uploading'}
+          </h1>
+          <Separator />
+        </div>
       )}
-      <Separator />
       <div className="my-2 flex text-xl items-center justify-center gap-2 w-fill">
         <Label htmlFor="select">Total No of Page</Label>
-        <Select id="select" onValueChange={setTotalPage}>
+        <Select id="select" onValueChange={setTotalPage} defaultValue={totalPage}>
           <SelectTrigger className="w-36">
-            <SelectValue placeholder="Total No of Page" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={1}>1</SelectItem>
@@ -102,15 +161,23 @@ export default function QuestionUpload({ id }) {
               upload={upload}
               setUpload={setUpload}
               id={id}
-              setQuesInfo={setQuesInfo}
               key={pageNo}
+              setUploadFinished={setUploadFinished}
             />
           );
         })}
       </div>
-      <Button onClick={() => setUpload(true)} className="w-1/2 min-w-[300px] my-2">
-        Upload
-      </Button>
+      {totalPage > 0 && (
+        <Button
+          onClick={() => {
+            setUpload(totalPage);
+            setIsLoading(true);
+          }}
+          className="w-1/2 min-w-[300px] my-2"
+        >
+          Upload
+        </Button>
+      )}
     </div>
   );
 }

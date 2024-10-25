@@ -68,7 +68,6 @@ export default function ChangePassword() {
         className: 'bg-green-500 text-white',
       });
       await fetch('/api/auth/logout');
-      if (localStorage) localStorage.removeItem('role');
       window.location.reload();
     } catch (error) {
       setIsLoading(false);

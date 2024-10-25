@@ -34,7 +34,7 @@ export async function middleware(req) {
   if (nextPath === '/changepassword') {
     try {
       const passChangeToken = req.cookies.get('passChangeToken')?.value;
-      await jwtVerify(passChangeToken);
+      await jwtVerify(passChangeToken, process.env.JWT_SECRET);
       return NextResponse.next();
     } catch (error) {
       return NextResponse.redirect(new URL('/login', req.url));
@@ -48,7 +48,7 @@ export async function middleware(req) {
 
   try {
     // Verify the token
-    const payload = await jwtVerify(token);
+    const payload = await jwtVerify(token, process.env.JWT_SECRET);
 
     if (payload.role === 'superadmin') {
       if (nextPath === '/dashboard') return NextResponse.redirect(new URL('/superadmin/dashboard', req.url));

@@ -1,9 +1,10 @@
 'use client';
 import { useToast } from '@/hooks/use-toast';
-import './navbar.css';
+import getNonHttpCookies from '@/lib/getNonHttpCookies';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import './navbar.css';
+import jwtVerify from '@/lib/jwtVerify';
 
 const MenuIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
@@ -71,7 +72,16 @@ export default function Header() {
   const { toast } = useToast();
 
   useEffect(() => {
-    setRole(localStorage.getItem('role') || '');
+    const setRoleFromToken = async () => {
+      try {
+        const cookies = getNonHttpCookies(document.cookie, 'role');
+        const payload = await jwtVerify(cookies, process.env.NEXT_PUBLIC_JWT_SECRET);
+        setRole(payload.role);
+      } catch (error) {
+        setRole('');
+      }
+    };
+    setRoleFromToken();
   }, []);
 
   const toggleSideBar = () => {

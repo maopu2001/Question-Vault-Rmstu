@@ -1,4 +1,3 @@
-import Loading from '@/components/ui/Loading';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,29 +9,39 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import Loading from '@/components/ui/Loading';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
-export default function ChangePassword() {
-  const router = useRouter();
+export default function DeleteQuestion({ quesId }) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
-  const onSubmit = async () => {
+  const onDelete = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch('/api/auth/changepassword');
+      const res = await fetch('/api/admin/question/deleteQuestion', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: 'editor', quesId }),
+      });
       if (!res.ok) {
         const resData = await res.json();
         throw new Error(resData.message);
       }
       const resData = await res.json();
-      console.log(resData);
+      toast({
+        title: resData.message,
+        className: 'bg-green-500 text-white',
+      });
       setIsLoading(false);
-      router.push(`/emailverification/${resData.id}`);
+      router.push('/admin/question/info');
     } catch (error) {
       toast({
-        title: error.message || 'Failed to get password changing token.',
+        title: error.message,
         className: 'bg-red-500 text-white',
       });
       setIsLoading(false);
@@ -42,21 +51,20 @@ export default function ChangePassword() {
   return (
     <AlertDialog>
       {isLoading && <Loading />}
-      <AlertDialogTrigger className="bg-primary-500 hover:bg-primary-700 w-fit mx-auto py-2 px-3 rounded-lg my-3 text-white">
-        Change Account Password
+      <AlertDialogTrigger className="bg-red-500 hover:bg-red-700 w-fit mx-auto py-2 px-3 rounded-lg text-white">
+        Delete Question
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action will sent a verification email to your registered email with an OTP. You can change your
-            password after verifying your email.
+            This action can not be undone. It will completely delete this question.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={onSubmit} className="bg-primary-600">
-            Change
+          <AlertDialogAction onClick={onDelete} className="bg-red-600 hover:bg-red-700">
+            Delete
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

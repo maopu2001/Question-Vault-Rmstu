@@ -65,9 +65,6 @@ export default function test() {
       return;
     }
 
-    const resData = await res.json();
-    localStorage.setItem('role', resData.role);
-
     setIsLoading(false);
     toast({
       title: 'User Logged In Successfully',

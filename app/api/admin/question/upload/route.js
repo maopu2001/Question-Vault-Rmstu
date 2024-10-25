@@ -1,10 +1,13 @@
+import jwtVerify from '@/lib/jwtVerify';
 import connectMongo from '@/mongoDB/connectMongo';
-import { File, QuesInfo } from '@/mongoDB/indexSchema';
+import { Auth, File, QuesInfo } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 const FILE_SIZE_LIMIT = 16 * 1024 * 1024; // 16MB threshold
 
 export async function POST(req) {
+  const token = req.cookies.get('token')?.value;
+
   const formData = await req.formData();
   const file = formData.get('image');
   const pageNo = formData.get('pageNo');
@@ -12,8 +15,18 @@ export async function POST(req) {
 
   try {
     await connectMongo();
-    const quesInfo = await QuesInfo.findById(id);
+    const payload = await jwtVerify(token, process.env.JWT_SECRET);
+    if (!payload) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
+    const auth = await Auth.findById(payload.id).populate('user');
+    if (!auth) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
+    const userId = auth.user._id;
+
+    const quesInfo = await QuesInfo.findById(id).populate('createdBy');
     if (!quesInfo) return NextResponse.json({ message: 'No question found.' }, { status: 404 });
+
+    if (String(userId) !== String(quesInfo.createdBy._id)) {
+      return NextResponse.json({ message: 'You are not authorized to edit this question info.' }, { status: 400 });
+    }
 
     const fileList = quesInfo.fileList;
     const pageNoArr = fileList.map((item) => {

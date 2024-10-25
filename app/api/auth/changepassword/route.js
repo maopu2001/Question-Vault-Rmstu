@@ -11,7 +11,7 @@ export async function POST(req) {
     const { password } = body;
     const passChangeToken = req.cookies.get('passChangeToken')?.value;
     if (!passChangeToken) return NextResponse.json({ message: 'Password Changing Token not found' }, { status: 400 });
-    const { id } = await jwtVerify(passChangeToken);
+    const { id } = await jwtVerify(passChangeToken, process.env.JWT_SECRET);
     if (!id || !password) return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -31,7 +31,7 @@ export async function GET(req) {
     let email, auth;
     await connectMongo();
     if (token) {
-      const payload = await jwtVerify(token);
+      const payload = await jwtVerify(token, process.env.JWT_SECRET);
       auth = await Auth.findById(payload.id).populate('user');
     } else {
       email = req.nextUrl.searchParams.get('email');

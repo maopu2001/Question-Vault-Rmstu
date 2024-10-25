@@ -6,7 +6,7 @@ import { NextResponse } from 'next/server';
 export async function GET(req) {
   try {
     const reqToken = req.headers.get('SuperAdmin-Token');
-    const SuperAdminToken = new TextEncoder().encode(process.env.NEXT_PUBLIC_SUPER_ADMIN_TOKEN).toString();
+    const SuperAdminToken = new TextEncoder().encode(process.env.SUPER_ADMIN_TOKEN).toString();
 
     if (!reqToken || reqToken !== SuperAdminToken) {
       return NextResponse.json({ error: 'Unauthorized access' }, { status: 401 });

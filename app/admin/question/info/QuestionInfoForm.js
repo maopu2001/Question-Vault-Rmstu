@@ -240,6 +240,7 @@ export default function InfoForm() {
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
+      form.reset();
       router.push(`/admin/question/upload/${resData.id}`);
     } catch (error) {
       toast({

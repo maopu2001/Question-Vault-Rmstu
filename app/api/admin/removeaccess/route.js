@@ -9,7 +9,7 @@ export async function GET(req) {
   const token = req.cookies.get('token')?.value;
   if (!token) return NextResponse.json({ message: 'Token not found' }, { status: 404 });
   try {
-    const payload = await jwtVerify(token);
+    const payload = await jwtVerify(token, process.env.JWT_SECRET);
     await connectMongo();
     let auth = await Auth.findById(payload.id);
     if (!auth) return NextResponse.json({ message: 'Id not found' }, { status: 404 });
@@ -23,7 +23,7 @@ export async function GET(req) {
       role: auth.role,
     };
 
-    const newToken = await jwtSign(newPayload, { expirationTime: '24h' });
+    const newToken = await jwtSign(newPayload, process.env.JWT_SECRET, { expirationTime: '24h' });
 
     const cookieOptions = {
       httpOnly: true,
@@ -33,6 +33,8 @@ export async function GET(req) {
     };
 
     cookies().set('token', newToken, cookieOptions);
+
+    const newRole = await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET, { expirationTime: '24h' });
 
     return NextResponse.json({ message: 'Admin access has been revoked' }, { status: 200 });
   } catch (err) {

@@ -23,7 +23,6 @@ export default function DeleteAccount() {
       const res = await fetch('/api/auth/deleteaccount');
       if (!res.ok) throw new Error('Failed to delete account.');
       await fetch('/api/auth/logout');
-      if (localStorage) localStorage.removeItem('role');
       setIsLoading(false);
       toast({
         title: 'Account deleted successfully',
