@@ -24,6 +24,7 @@
     "clsx": "^2.1.1",
     "jose": "^5.9.6",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^2.5.2",
     "lucide-react": "^0.451.0",
     "mongoose": "^8.7.2",
     "next": "14.2.15",

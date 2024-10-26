@@ -102,17 +102,19 @@ export default function QuestionUpload({ id }) {
                 <td className="capitalize font-semibold pr-2">Pages</td>
                 <td className="w-3 font-semibold">:</td>
                 <td>
-                  {quesInfo.fileList.map((item, i) => {
-                    return (
-                      <Button
-                        className="mx-1 rounded-full bg-primary-500"
-                        onClick={() => previewImg(quesInfo._id, item.pageNo)}
-                        key={i}
-                      >
-                        {item.pageNo}
-                      </Button>
-                    );
-                  })}
+                  {quesInfo.fileList
+                    .sort((x, y) => x.pageNo - y.pageNo) //to sort the fileList in accending order
+                    .map((item, i) => {
+                      return (
+                        <Button
+                          className="mx-1 rounded-full bg-primary-500"
+                          onClick={() => previewImg(quesInfo._id, item.pageNo)}
+                          key={i}
+                        >
+                          {item.pageNo}
+                        </Button>
+                      );
+                    })}
                 </td>
               </tr>
             )}

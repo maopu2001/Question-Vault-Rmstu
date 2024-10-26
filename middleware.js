@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import jwtVerify from './lib/jwtVerify';
 
 export async function middleware(req) {
-  const publicPaths = ['/', '/about'];
+  const publicPaths = ['/about'];
   const adminPaths = ['/admin'];
   const superadminPaths = ['/superadmin'];
 
@@ -49,6 +49,12 @@ export async function middleware(req) {
   try {
     // Verify the token
     const payload = await jwtVerify(token, process.env.JWT_SECRET);
+
+    if (payload) {
+      if (nextPath === '/') return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
+    if (payload.role === 'user' && nextPath === '/dashboard')
+      return NextResponse.redirect(new URL('/searchQuestion', req.url));
 
     if (payload.role === 'superadmin') {
       if (nextPath === '/dashboard') return NextResponse.redirect(new URL('/superadmin/dashboard', req.url));

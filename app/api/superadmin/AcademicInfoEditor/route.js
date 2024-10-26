@@ -1,5 +1,5 @@
 import connectMongo from '@/mongoDB/connectMongo';
-import { Course, Degree, Department, Faculty, Semester } from '@/mongoDB/indexSchema';
+import { Course, Degree, Department, Faculty, QuesInfo, Semester } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
@@ -62,6 +62,19 @@ export async function GET(req) {
         return NextResponse.json({ data: [] }, { status: 200 });
       }
       return NextResponse.json({ data: courses }, { status: 200 });
+    } catch (err) {
+      return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
+    }
+  } else if (params.get('id') === 'session') {
+    try {
+      await connectMongo();
+      const quesInfoList = await QuesInfo.find();
+      const sessionsArray = quesInfoList.map((quesInfo) => quesInfo.session);
+      const sessions = [...new Set(sessionsArray)].sort();
+
+      if (!sessions || sessions.length < 1) return NextResponse.json({ data: sessions }, { status: 200 });
+
+      return NextResponse.json({ data: sessions }, { status: 200 });
     } catch (err) {
       return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
     }

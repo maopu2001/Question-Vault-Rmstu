@@ -39,7 +39,7 @@ export default function PreviewImage({ data, setPreview }) {
           throw new Error(resData.message);
         }
         const resData = await res.json();
-        const data = makeImageFromBase64(resData.data);
+        const data = makeImageFromBase64(resData.data, 'fileInfo');
         setImage(data);
         setRole(resData.role);
         setIsLoading(false);
@@ -82,7 +82,7 @@ export default function PreviewImage({ data, setPreview }) {
     <div className="overflow-auto fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-primary-500/70 flex">
       {isLoading && <Loading />}
       {image && (
-        <div className="m-auto z-20 relative w-fit h-[90%] rounded-xl p-2 bg-primary-50">
+        <div className="m-auto z-20 relative md:w-fit md:h-[95%] w-[95%] h-fit rounded-xl p-2 bg-primary-50">
           <div className="absolute right-1 top-1 flex gap-2">
             {(role === 'editor' || role === 'superadmin') && (
               <Button onClick={onDelete} className="bg-primary-300/50 hover:bg-red-500 rounded-full px-3">

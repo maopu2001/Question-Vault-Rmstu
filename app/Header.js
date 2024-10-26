@@ -24,6 +24,12 @@ const HomeIcon = (
   </svg>
 );
 
+const SearchIcon = (
+  <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z" />
+  </svg>
+);
+
 const DashboardIcon = (
   <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
     <path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z" />
@@ -82,7 +88,7 @@ export default function Header() {
       }
     };
     setRoleFromToken();
-  }, []);
+  });
 
   const toggleSideBar = () => {
     setSideBarRendered(true);
@@ -108,12 +114,14 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed h-20 w-full flex items-center justify-center bg-primary-800 text-white p-4 top-0 z-10">
-      <h1 className="select-none text-2xl font-bold">Exam Question Repo</h1>
+    <header className="fixed h-20 w-full flex items-center justify-center sm:justify-start bg-primary-800 text-white p-4 top-0 z-10">
+      <h1 className="select-none text-2xl font-bold ml-12 border p-2 rounded-md">Exam Question Repo</h1>
       <navbar className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
         {role === '' && <Link href="/">Home</Link>}
-        {role !== '' && <Link href="/dashboard">Dashboard</Link>}
-        {(role === 'admin' || role === 'superadmin') && <Link href="/admin/question/info">Create</Link>}
+        {role === 'admin' && <Link href="/admin/dashboard">Dashboard</Link>}
+        {role === 'superadmin' && <Link href="/superadmin/dashboard">Dashboard</Link>}
+        {role !== '' && <Link href="/searchQuestion">Search Question</Link>}
+        {(role === 'admin' || role === 'superadmin') && <Link href="/admin/question/info">Create Questions</Link>}
         {role === 'superadmin' && <Link href="/superadmin/AcademicInfoEditor">Academic Information</Link>}
         {role === '' && <Link href="/login">Login</Link>}
         {role === '' && <Link href="/signup">Signup</Link>}
@@ -142,14 +150,24 @@ export default function Header() {
                 {HomeIcon} Home
               </Link>
             )}
-            {role !== '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/dashboard">
+            {role === 'admin' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/dashboard">
                 {DashboardIcon} Dashboard
+              </Link>
+            )}
+            {role === 'superadmin' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/dashboard">
+                {DashboardIcon} Dashboard
+              </Link>
+            )}
+            {role !== '' && (
+              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/searchQuestion">
+                {SearchIcon} Search Questions
               </Link>
             )}
             {(role === 'admin' || role === 'superadmin') && (
               <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/question/info">
-                {CreateIcon} Create
+                {CreateIcon} Create Questions
               </Link>
             )}
             {role === 'superadmin' && (

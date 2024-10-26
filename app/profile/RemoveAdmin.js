@@ -27,6 +27,7 @@ export default function RemoveAdmin(props) {
         className: 'bg-green-500 text-white',
       });
       setIsLoading(false);
+      await fetch('/api/auth/logout');
       window.location.reload();
     } catch (error) {
       toast({

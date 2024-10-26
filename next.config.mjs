@@ -4,7 +4,6 @@ const nextConfig = {
     config.externals = [...config.externals, 'fs'];
     return config;
   },
-  reactStrictMode: true,
 };
 
 export default nextConfig;
