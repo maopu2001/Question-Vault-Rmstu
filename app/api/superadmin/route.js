@@ -5,13 +5,6 @@ import { NextResponse } from 'next/server';
 
 export async function GET(req) {
   try {
-    const reqToken = req.headers.get('SuperAdmin-Token');
-    const SuperAdminToken = new TextEncoder().encode(process.env.SUPER_ADMIN_TOKEN).toString();
-
-    if (!reqToken || reqToken !== SuperAdminToken) {
-      return NextResponse.json({ error: 'Unauthorized access' }, { status: 401 });
-    }
-
     await connectMongo();
 
     const params = new URL(req.url).searchParams;
@@ -26,6 +19,7 @@ export async function GET(req) {
       filteredUsers = filteredAuth.map((auth) => auth.user);
     }
 
+    if (filteredUsers.length < 1) return NextResponse.json({ message: `No ${role} is found` }, { status: 400 });
     return NextResponse.json({ filteredUsers }, { status: 200 });
   } catch (error) {
     console.error('Error in superadmin GET route:', error);

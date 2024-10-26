@@ -26,7 +26,6 @@ export default function EmailVerification({ id }) {
         throw new Error(error.message);
       }
       const resData = await res.json();
-      console.log(resData);
       setIsLoading(false);
       toast({
         title: 'Email verification successful',

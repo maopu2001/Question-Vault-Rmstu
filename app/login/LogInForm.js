@@ -45,7 +45,6 @@ export default function test() {
   };
 
   const onSubmit = async (data) => {
-    console.log(data);
     setIsLoading(true);
     const res = await fetch('/api/auth/login', {
       method: 'POST',

@@ -28,7 +28,6 @@ export default function Profile() {
         if (resData.data.role === 'superadmin') setRoleColor('text-red-500');
         setData(resData.data);
         setRole(resData.data.role);
-        console.log(role);
         setIsLoading(false);
       } catch (error) {
         setData([]);

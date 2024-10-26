@@ -16,7 +16,7 @@ export default function FormCheckboxField({ data }) {
       <FormLabel>
         {label} <span className="text-primary-500 text-xs font-thin select-none">- Optional</span>
       </FormLabel>
-      <div className="flex gap-3">
+      <div className="flex flex-col gap-3">
         {arr.map((item, i) => {
           return (
             <div key={i} className="flex items-center gap-1">

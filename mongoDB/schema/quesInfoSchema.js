@@ -10,7 +10,7 @@ const quesInfoSchema = new mongoose.Schema({
   exam: { type: String, required: true },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   fileList: { type: Array, required: true, default: [] },
-});
+}, { timestamps: true });
 
 const QuesInfo = mongoose.models.QuesInfo || mongoose.model('QuesInfo', quesInfoSchema);
 

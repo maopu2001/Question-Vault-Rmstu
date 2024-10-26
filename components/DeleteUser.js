@@ -15,8 +15,7 @@ import { toast } from '@/hooks/use-toast';
 import Image from 'next/image';
 import { useState } from 'react';
 
-export default function DeleteUser(props) {
-  const { id } = props;
+export default function DeleteUser({ id }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const onDelete = async () => {
@@ -47,9 +46,7 @@ export default function DeleteUser(props) {
     <AlertDialog>
       {isLoading && <Loading />}
       <AlertDialogTrigger>
-        <Button className="rounded-full w-10 p-1 m-1">
-          <Image src="/delete.svg" alt="Delete" width={36} height={36} />
-        </Button>
+        <Button className="bg-red-400 hover:bg-red-500 text-black rounded-md px-2 w-full">Delete User</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

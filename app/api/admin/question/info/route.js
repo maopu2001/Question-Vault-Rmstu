@@ -10,6 +10,7 @@ export async function POST(req) {
     await connectMongo();
     const payload = await jwtVerify(token, process.env.JWT_SECRET);
     if (!payload) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
+    console.log(payload.id);
     const auth = await Auth.findById(payload.id).populate('user');
     if (!auth) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
     const userId = auth.user._id;

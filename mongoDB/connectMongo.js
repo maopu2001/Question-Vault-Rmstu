@@ -21,7 +21,7 @@ export default async () => {
       .then((mongoose) => {
         return mongoose;
       })
-      .catch((err) => console.log('There is an error while connecting to MongoDB : ', err.message));
+      .catch((err) => console.error('There is an error while connecting to MongoDB : ', err.message));
   }
   cached.conn = await cached.promise;
   return cached.conn;

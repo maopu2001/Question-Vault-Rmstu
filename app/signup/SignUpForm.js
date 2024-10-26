@@ -229,7 +229,6 @@ export default function SignUpForm() {
     const resData = await res.json();
     setIsLoading(false);
     form.reset();
-    console.log(resData.redirect);
     router.push(resData.redirect);
   };
 

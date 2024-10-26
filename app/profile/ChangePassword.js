@@ -27,7 +27,6 @@ export default function ChangePassword() {
         throw new Error(resData.message);
       }
       const resData = await res.json();
-      console.log(resData);
       setIsLoading(false);
       router.push(`/emailverification/${resData.id}`);
     } catch (error) {

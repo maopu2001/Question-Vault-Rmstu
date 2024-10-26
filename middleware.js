@@ -42,7 +42,7 @@ export async function middleware(req) {
   }
 
   if (!token) {
-    console.log('Token not found');
+    console.error('Token not found');
     return NextResponse.redirect(new URL('/login', req.url));
   }
 

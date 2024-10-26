@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import UploadBox from './UploadBox';
 import Loading from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/separator';
@@ -10,6 +10,7 @@ import PreviewImage from '@/components/PreviewImage';
 import { useRouter } from 'next/navigation';
 import { toast } from '@/hooks/use-toast';
 import DeleteQuestion from './DeleteQuestion';
+import convertUSTtoBST from '@/lib/convertUSTtoBST';
 
 export default function QuestionUpload({ id }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -72,7 +73,15 @@ export default function QuestionUpload({ id }) {
           <tbody>
             {quesInfo &&
               Object.keys(quesInfo).map((item, i) => {
-                if (item === 'createdBy' || item === 'fileList' || item === '_id' || item === '__v') return null;
+                if (
+                  item === 'createdAt' ||
+                  item === 'updatedAt' ||
+                  item === 'createdBy' ||
+                  item === 'fileList' ||
+                  item === '_id' ||
+                  item === '__v'
+                )
+                  return null;
                 return (
                   <tr key={i}>
                     <td className="capitalize font-semibold pr-2">{item}</td>
@@ -81,22 +90,45 @@ export default function QuestionUpload({ id }) {
                   </tr>
                 );
               })}
-            {quesInfo && quesInfo.createdBy && (
-              <tr>
-                <td className="capitalize font-semibold pr-2" valign="top">
-                  Created By
-                </td>
-                <td className="w-3 font-semibold" valign="top">
-                  :
-                </td>
-                <td>
-                  {' '}
-                  {quesInfo.createdBy.name} <br />
-                  Department: {quesInfo.createdBy.department} <br />
-                  Session: {quesInfo.createdBy.session}
-                </td>
-              </tr>
+            {quesInfo && (
+              <React.Fragment>
+                <tr>
+                  <td className="capitalize font-semibold pr-2" valign="top">
+                    Created By
+                  </td>
+                  <td className="w-3 font-semibold" valign="top">
+                    :
+                  </td>
+                  <td>
+                    {' '}
+                    {quesInfo.createdBy.name} <br />
+                    Department: {quesInfo.createdBy.department} <br />
+                    Session: {quesInfo.createdBy.session}
+                    <br />
+                    Degree: {quesInfo.createdBy.degree}
+                  </td>
+                </tr>
+                <tr>
+                  <td className="capitalize font-semibold pr-2" valign="top">
+                    Created At
+                  </td>
+                  <td className="w-3 font-semibold" valign="top">
+                    :
+                  </td>
+                  <td>{convertUSTtoBST(quesInfo?.createdAt)}</td>
+                </tr>
+                <tr>
+                  <td className="capitalize font-semibold pr-2" valign="top">
+                    Updated At
+                  </td>
+                  <td className="w-3 font-semibold" valign="top">
+                    :
+                  </td>
+                  <td>{convertUSTtoBST(quesInfo?.updatedAt)}</td>
+                </tr>
+              </React.Fragment>
             )}
+
             {quesInfo && quesInfo.fileList && quesInfo.fileList.length > 0 && (
               <tr>
                 <td className="capitalize font-semibold pr-2">Pages</td>

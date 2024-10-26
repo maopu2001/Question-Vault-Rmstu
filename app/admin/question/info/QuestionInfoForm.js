@@ -239,9 +239,9 @@ export default function InfoForm() {
         title: resData.message,
         className: 'bg-green-500 text-white',
       });
-      setIsLoading(false);
       form.reset();
       router.push(`/admin/question/upload/${resData.id}`);
+      setIsLoading(false);
     } catch (error) {
       toast({
         title: error.message,

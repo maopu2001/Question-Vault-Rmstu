@@ -7,7 +7,6 @@ export const metadata = {
 export default function AdminDashboardPage() {
   return (
     <div>
-      <h1 className="text-2xl font-bold text-center my-2">Admin Dashboard</h1>
       <AdminDashboard />
     </div>
   );

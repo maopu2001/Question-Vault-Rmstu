@@ -48,7 +48,6 @@ export default function SemesterEditor() {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const resData = await res.json();
-        console.log(resData.data);
         setData(resData.data);
       } catch (err) {
         console.error(err.message);

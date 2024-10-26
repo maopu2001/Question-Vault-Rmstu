@@ -37,7 +37,7 @@ export default function UploadBox({ pageNo, upload, setUpload, id, setUploadFini
         setUploadFinished((p) => p + 1);
       } catch (error) {
         setUploadFinished((p) => p + 1);
-        console.log(error.message);
+        console.error(error.message);
       }
     };
 

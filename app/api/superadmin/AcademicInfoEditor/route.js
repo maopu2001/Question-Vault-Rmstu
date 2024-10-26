@@ -61,7 +61,13 @@ export async function GET(req) {
       if (!courses || courses.length < 1) {
         return NextResponse.json({ data: [] }, { status: 200 });
       }
-      return NextResponse.json({ data: courses }, { status: 200 });
+      const sortedCourses = courses.sort((a, b) => {
+        const numA = parseInt(a.courseCode.match(/\d+/)[0], 10);
+        const numB = parseInt(b.courseCode.match(/\d+/)[0], 10);
+        return numA - numB;
+      });
+
+      return NextResponse.json({ data: sortedCourses }, { status: 200 });
     } catch (err) {
       return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });
     }

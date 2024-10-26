@@ -2,7 +2,7 @@ export default function Loading(props) {
   return (
     <div
       {...props}
-      className="fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-primary-500 opacity-70 flex items-center justify-center"
+      className="bg-opacity-10 backdrop-blur-lg fixed z-50 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-white border border-white border-opacity-20 flex items-center justify-center"
     >
       <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" stroke="black" width={138} height={138}>
         <g fill="none" fillRule="evenodd">

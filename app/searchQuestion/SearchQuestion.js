@@ -10,14 +10,14 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import QuestionListTable from './QuestionListTable';
+import QuestionListTable from '@/components/QuestionListTable';
+import { set } from 'mongoose';
 
 const FormSchema = z.object({
   degree: z.string().min(1, { message: 'Please select a degree type.' }),
   semester: z.string().min(1, { message: 'Please select a semester.' }),
   faculty: z.string().min(1, { message: 'Please select a faculty.' }),
   department: z.string().min(1, { message: 'Please select a department.' }),
-  course: z.string().min(1, { message: 'Please enter a course code.' }),
 });
 
 export default function SearchQuestion() {
@@ -32,7 +32,6 @@ export default function SearchQuestion() {
       department: '',
       degree: '',
       semester: '',
-      course: '',
     },
   });
 
@@ -50,6 +49,7 @@ export default function SearchQuestion() {
   const [sessions, setSessions] = useState([]);
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
 
   //setting faculties
   useEffect(() => {
@@ -137,6 +137,7 @@ export default function SearchQuestion() {
             acc.push(`${item.courseTitle} (${item.courseCode})`);
           return acc;
         }, []);
+
         setCourses(data);
       } catch (error) {
         setCourses([]);
@@ -190,9 +191,8 @@ export default function SearchQuestion() {
 
   const courseData = {
     label: 'Course',
-    name: 'course',
-    placeholder: 'Select a Course',
     arr: courses,
+    setFilteredArr: setFilteredCourses,
   };
 
   // data for checkboxes
@@ -209,7 +209,7 @@ export default function SearchQuestion() {
   };
 
   const onSubmit = async (data) => {
-    const body = { ...data, exams: filteredExams, sessions: filteredSessions };
+    const body = { ...data, exams: filteredExams, sessions: filteredSessions, courses: filteredCourses };
     setIsLoading(true);
     try {
       const res = await fetch('/api/searchQuestion', {
@@ -248,8 +248,8 @@ export default function SearchQuestion() {
             <FormSelectField formControl={form.control} data={departmentData} />
             <FormSelectField formControl={form.control} data={degreeData} />
             <FormSelectField formControl={form.control} data={semesterData} />
-            <FormSelectField formControl={form.control} data={courseData} />
 
+            <FormCheckboxField data={courseData} />
             <FormCheckboxField data={sessionData} />
             <FormCheckboxField data={examData} />
             <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
