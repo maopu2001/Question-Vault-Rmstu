@@ -60,8 +60,8 @@ export default function Profile() {
           {data.role === 'user' && <RequestAdmin roleColor={roleColor} />}
         </h2>
       </div>
-      <div className="border-2 my-3 rounded-lg w-fit mx-auto p-2">
-        <table className="w-2/3 min-w-[400px] mx-auto text-lg">
+      <div className="sm:w-fit w-[95%] border-2 my-3 rounded-lg mx-auto p-2">
+        <table className="mx-auto text-lg">
           <tbody>
             <tr>
               <td>Faculty</td>

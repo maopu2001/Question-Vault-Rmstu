@@ -225,7 +225,6 @@ export default function SearchQuestion() {
       }
       const resData = await res.json();
       setQuestionList([...resData.data]);
-      form.reset();
       setIsLoading(false);
     } catch (error) {
       toast({
@@ -238,12 +237,12 @@ export default function SearchQuestion() {
   };
 
   return (
-    <div className="mx-auto w-5/6">
+    <div className="mx-auto sm:w-5/6 w-[95%]">
       {isLoading && <Loading />}
       {(questionList.length < 1 && (
         <Form {...form}>
           <h1 className="text-2xl font-bold py-3 text-center">Search Question</h1>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2 mx-auto">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="sm:w-1/2 w-full space-y-2 mx-auto">
             <FormSelectField formControl={form.control} data={facultyData} />
             <FormSelectField formControl={form.control} data={departmentData} />
             <FormSelectField formControl={form.control} data={degreeData} />

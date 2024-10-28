@@ -44,7 +44,7 @@ export default function ChangePassword() {
       <AlertDialogTrigger className="bg-primary-500 hover:bg-primary-700 w-fit mx-auto py-2 px-3 rounded-lg my-3 text-white">
         Change Account Password
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="sm:w-full w-[95%] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>

@@ -46,9 +46,9 @@ export default function DeleteUser({ id }) {
     <AlertDialog>
       {isLoading && <Loading />}
       <AlertDialogTrigger>
-        <Button className="bg-red-400 hover:bg-red-500 text-black rounded-md px-2 w-full">Delete User</Button>
+        <div className="bg-red-400 hover:bg-red-500 text-black rounded-md p-2 flex justify-center items-center">Delete User</div>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="sm:w-full w-[95%] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>

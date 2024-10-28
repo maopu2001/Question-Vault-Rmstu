@@ -52,9 +52,11 @@ export default function DeleteQuestion({ id, setQuestionList }) {
     <AlertDialog>
       {isLoading && <Loading />}
       <AlertDialogTrigger>
-        <Button className="bg-red-400 hover:bg-red-500 rounded-full w-12 h-12 p-0">{DeleteIcon}</Button>
+        <div className="bg-red-400 hover:bg-red-500 rounded-full w-12 h-12 p-0 flex justify-center items-center">
+          {DeleteIcon}
+        </div>
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="sm:w-full w-[95%] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>

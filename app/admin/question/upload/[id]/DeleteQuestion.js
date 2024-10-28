@@ -54,7 +54,7 @@ export default function DeleteQuestion({ quesId }) {
       <AlertDialogTrigger className="bg-red-500 hover:bg-red-700 w-fit mx-auto py-2 px-3 rounded-lg text-white">
         Delete Question
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="sm:w-full w-[95%] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>

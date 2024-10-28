@@ -11,7 +11,7 @@ export default function SuperAdminDashboard() {
   const [tab, setTab] = useState('user');
 
   return (
-    <div>
+    <div className='sm:w-5/6 w-[95%] mx-auto'>
       <h1 className="text-2xl font-bold py-3 text-center w-full h-full">Super Admin Dashboard</h1>
       <Tabs defaultValue="user" className="flex flex-col w-full">
         <TabsList className="w-fit mx-auto bg-primary-200 rounded-xl border-1 shadow-lg *:rounded-xl">

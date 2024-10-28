@@ -86,14 +86,14 @@ export default function UserInfoTable({ setReload, role, userList, error }) {
     <div>
       {isLoading && <Loading />}
       {(error && (
-        <p className=" border-2 border-primary-300 rounded-md shadow-lg p-4 px-16 text-center font-semibold w-fit mx-auto">
+        <p className="border-2 border-primary-300 rounded-md shadow-lg p-4 px-16 text-center font-semibold w-fit mx-auto">
           {error}
         </p>
       )) || (
         <div className="w-[90%] grid md:grid-cols-2 grid-cols-1 gap-4 my-4 mx-auto">
           {userList.map((user, i) => {
             return (
-              <div className="border-2 border-primary-300 rounded-md shadow-lg p-4 relative flex gap-5" key={i}>
+              <div className="border-2 border-primary-300 rounded-md shadow-lg sm:p-4 relative flex gap-5 pb-16" key={i}>
                 <table className="p-4" key={i}>
                   <tbody>
                     <tr>
@@ -122,11 +122,11 @@ export default function UserInfoTable({ setReload, role, userList, error }) {
                     </tr>
                   </tbody>
                 </table>
-                <div className="flex flex-col gap-2 absolute right-5 top-5 w-fit">
+                <div className="flex sm:flex-col gap-2 absolute sm:right-5 sm:top-5 bottom-2 sm:w-fit sm:h-fit w-full justify-center">
                   {role === 'admin' && (
                     <Button
                       onClick={() => removeAdmin(user._id)}
-                      className="bg-red-400 hover:bg-red-500 text-black rounded-md px-2 w-full"
+                      className="bg-red-400 hover:bg-red-500 text-black rounded-md px-2 w-fit"
                     >
                       Remove Admin
                     </Button>
@@ -134,7 +134,7 @@ export default function UserInfoTable({ setReload, role, userList, error }) {
                   {role !== 'admin' && (
                     <Button
                       onClick={() => makeAdmin(user._id)}
-                      className="bg-blue-700 hover:bg-blue-500 rounded-md px-2 w-full"
+                      className="bg-blue-700 hover:bg-blue-500 rounded-md px-2 w-fit"
                     >
                       Make Admin
                     </Button>

@@ -64,7 +64,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
     const pages = [...resData.data];
     setIsLoading(false);
     const courseCode = ques.course.match(/\(([^)]+)\)/)[1];
-    const name = `${ques.semester} ${ques.exam} - ${courseCode} - (${ques.session})`;
+    const name = `${ques.semester} - ${courseCode} (${ques.exam}) (${ques.session})`;
     imageUrlToPdf(pages, name);
   };
 
@@ -73,12 +73,12 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
   };
 
   return (
-    <div className="w-[90%] grid md:grid-cols-2 grid-cols-1 gap-4 my-4 mx-auto">
+    <div className="sm:w-[90%] grid md:grid-cols-2 grid-cols-1 gap-4 my-4 mx-auto">
       {isLoading && <Loading />}
       {questionList.map((ques, i) => {
         return (
           <div className="relative border-2 border-primary-300 rounded-md shadow-lg p-4" key={i}>
-            <h1 className="font-bold w-fit mx-auto mb-3 shadow-lg px-12 py-2 rounded-xl">Question Information</h1>
+            <h1 className="font-bold w-fit mb-3 shadow-lg px-12 py-2 rounded-xl">Question Information</h1>
             <div className="flex gap-5">
               <table className="p-4 w-full" key={i}>
                 <tbody>
@@ -113,9 +113,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
 
                   <tr>
                     <th colSpan={2}>
-                      <h1 className="font-bold w-fit mx-auto mb-3 shadow-lg px-12 py-2 rounded-xl">
-                        Create Information
-                      </h1>
+                      <h1 className="font-bold w-fit mb-3 shadow-lg px-12 py-2 rounded-xl">Create Information</h1>
                     </th>
                   </tr>
                   <tr>
@@ -144,7 +142,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
                   </tr>
                 </tbody>
               </table>
-              <div className="flex flex-col gap-2 absolute right-5 top-5">
+              <div className="flex flex-col gap-2 absolute sm:right:5 right-2 top-5">
                 {role === 'editor' && (
                   <Button
                     onClick={() => handleEdit(ques._id)}
