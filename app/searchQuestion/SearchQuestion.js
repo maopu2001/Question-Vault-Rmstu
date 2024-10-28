@@ -257,7 +257,7 @@ export default function SearchQuestion() {
             </Button>
           </form>
         </Form>
-      )) || <QuestionListTable questionList={questionList} />}
+      )) || <QuestionListTable questionList={questionList} setQuestionList={setQuestionList} />}
     </div>
   );
 }

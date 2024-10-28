@@ -1,6 +1,6 @@
 import jwtVerify from '@/lib/jwtVerify';
 import connectMongo from '@/mongoDB/connectMongo';
-import { Auth, File, QuesInfo } from '@/mongoDB/indexSchema';
+import { Auth, DeletedFile, File, QuesInfo } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 const FILE_SIZE_LIMIT = 16 * 1024 * 1024; // 16MB threshold
@@ -9,7 +9,7 @@ export async function POST(req) {
   const token = req.cookies.get('token')?.value;
 
   const formData = await req.formData();
-  const file = formData.get('image');
+  const image = formData.get('image');
   const pageNo = formData.get('pageNo');
   const id = formData.get('id');
 
@@ -36,17 +36,14 @@ export async function POST(req) {
       return NextResponse.json({ message: 'This page number already exists.' }, { status: 400 });
     }
 
-    if (!file) {
+    if (!image) {
       return NextResponse.json({ message: 'No file received.' }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    const newFormdata = new FormData();
+    newFormdata.append('image', image);
 
-    if (buffer.length >= FILE_SIZE_LIMIT)
-      return NextResponse.json({ message: 'The file exceeds the size limit of 16 MB' }, { status: 400 });
-
-    const newFileId = await saveNormalFile(file.name, file.type, file.size, buffer);
+    const newFileId = await saveImage(image.name, image.type, image.size, newFormdata);
 
     quesInfo.fileList.push({ pageNo, id: newFileId });
     await quesInfo.save();
@@ -56,15 +53,37 @@ export async function POST(req) {
   }
 }
 
-async function saveNormalFile(filename, contentType, size, buffer) {
-  // For smaller files, store as base64 string
-  const base64String = buffer.toString('base64');
-  const newFile = new File({
-    filename,
-    contentType,
-    size,
-    content: base64String,
-  });
-  await newFile.save();
-  return newFile._id;
+async function saveImage(filename, contentType, size, formData) {
+  try {
+    const res = await fetch(process.env.IMGBB_URL, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!res.ok) {
+      throw new Error('Image Upload Failed');
+    }
+    const resData = await res.json();
+
+    const deletedFiles = await DeletedFile.find({ deleteUrl: resData.data.delete_url });
+
+    if (deletedFiles && deletedFiles.length > 0) {
+      for (let deletedFile of deletedFiles) {
+        await DeletedFile.deleteOne({ deleteUrl: deletedFile.deleteUrl });
+      }
+    }
+
+    const newFile = new File({
+      filename,
+      contentType,
+      size,
+      imageUrl: resData.data.image.url,
+      deleteUrl: resData.data.delete_url,
+      thumbUrl: resData.data.medium.url,
+    });
+
+    await newFile.save();
+    return newFile._id;
+  } catch (error) {
+    throw new Error('Image Upload Failed');
+  }
 }

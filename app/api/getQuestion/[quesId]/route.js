@@ -14,8 +14,7 @@ export async function GET(req, { params }) {
     const files = [];
     for (let file of fileList) {
       const fileInfo = await File.findById(file.id);
-      const str = `data:${fileInfo.contentType};base64,${fileInfo.content}`;
-      files.push(str);
+      files.push(fileInfo);
     }
 
     return NextResponse.json({ data: files }, { status: 200 });

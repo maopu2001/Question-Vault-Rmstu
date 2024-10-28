@@ -1,5 +1,5 @@
 import connectMongo from '@/mongoDB/connectMongo';
-import { File, QuesInfo } from '@/mongoDB/indexSchema';
+import { DeletedFile, File, QuesInfo } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
 export async function DELETE(req) {
@@ -16,10 +16,12 @@ export async function DELETE(req) {
     const getFileId = () => {
       for (let item of quesInfo.fileList) if (item.pageNo === pageNo) return item.id;
     };
-    await File.findByIdAndDelete(getFileId());
+    const file = await File.findByIdAndDelete(getFileId());
+    await DeletedFile.create({ deleteUrl: file.deleteUrl });
+
     quesInfo.fileList = quesInfo.fileList.filter((item) => item.pageNo !== pageNo);
-    
     await quesInfo.save();
+
     return NextResponse.json({ message: `Page no ${pageNo} deleted successfully.` }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: error.message || 'Something went wrong.' }, { status: 500 });

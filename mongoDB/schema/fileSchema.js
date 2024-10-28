@@ -5,8 +5,9 @@ const fileSchema = new mongoose.Schema({
   contentType: { type: String, required: true },
   size: { type: Number, required: true },
   uploadDate: { type: Date, default: Date.now },
-  content: String, // For smaller files
-  gridFSId: mongoose.Schema.Types.ObjectId, // For larger files
+  imageUrl: { type: String, required: true },
+  deleteUrl: { type: String, required: true },
+  thumbUrl: { type: String, required: true },
 });
 
 // Create a model from the schema

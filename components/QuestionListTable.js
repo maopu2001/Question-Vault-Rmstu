@@ -1,7 +1,7 @@
 import PreviewQuestion from '@/components/PreviewQuestion';
 import { Button } from '@/components/ui/button';
 import Loading from '@/components/ui/Loading';
-import base64ToPdf from '@/lib/base64ToPdf';
+import imageUrlToPdf from '@/lib/imageUrlToPdf';
 import convertUSTtoBST from '@/lib/convertUSTtoBST';
 import getNonHttpCookies from '@/lib/getNonHttpCookies';
 import { useRouter } from 'next/navigation';
@@ -65,7 +65,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
     setIsLoading(false);
     const courseCode = ques.course.match(/\(([^)]+)\)/)[1];
     const name = `${ques.semester} ${ques.exam} - ${courseCode} - (${ques.session})`;
-    base64ToPdf(pages, name);
+    imageUrlToPdf(pages, name);
   };
 
   const handleEdit = (quesId) => {
@@ -174,7 +174,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
                 )}
               </div>
             </div>
-            {preview && <PreviewQuestion quesInfo={ques} pages={pages} setPreview={setPreview} />}
+            {preview && <PreviewQuestion pages={pages} setPreview={setPreview} />}
           </div>
         );
       })}

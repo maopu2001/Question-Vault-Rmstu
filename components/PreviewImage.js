@@ -1,9 +1,9 @@
 import { toast } from '@/hooks/use-toast';
-import makeImageFromBase64 from '@/lib/makeImageFromBase64';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Button } from './ui/button';
 import Loading from './ui/Loading';
+import { set } from 'mongoose';
 
 const CloseIcon = (
   <svg width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="white">
@@ -39,8 +39,8 @@ export default function PreviewImage({ data, setPreview }) {
           throw new Error(resData.message);
         }
         const resData = await res.json();
-        const data = makeImageFromBase64(resData.data, 'fileInfo');
-        setImage(data);
+        console.log(resData.data.imageUrl);
+        setImage({ image: resData.data.imageUrl, thumb: resData.data.thumbUrl });
         setRole(resData.role);
         setIsLoading(false);
       } catch (error) {
@@ -98,8 +98,8 @@ export default function PreviewImage({ data, setPreview }) {
           </div>
           <div className="h-full">
             <h2 className="text-center font-bold my-2">Page No - {pageNo}</h2>
-            <Link href={image} target="_blank">
-              <img className="m-auto h-[94%] object-cover border-2 rounded-md" src={image} />
+            <Link href={image.image} target="_blank">
+              <img className="m-auto h-[94%] object-cover border-2 rounded-md" src={image.thumb} />
             </Link>
           </div>
         </div>

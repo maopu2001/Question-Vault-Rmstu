@@ -1,4 +1,3 @@
-import makeImageFromBase64 from '@/lib/makeImageFromBase64';
 import Link from 'next/link';
 import { Button } from './ui/button';
 import React from 'react';
@@ -26,13 +25,12 @@ export default function PreviewQuestion({ pages, setPreview }) {
           <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
             {pages.length > 0 &&
               pages.map((page, i) => {
-                const image = makeImageFromBase64(page, 'base64');
                 return (
                   <div key={i}>
                     <h1 className="text-center font-bold mb-2">Page No - {i + 1}</h1>
                     <div className="w-full bg-slate-300 rounded-md">
-                      <Link href={image} target="_blank">
-                        <img className="object-contain w-full h-full border-2 rounded-md" src={image} />
+                      <Link href={page.imageUrl} target="_blank">
+                        <img className="object-contain w-full h-full border-2 rounded-md" src={page.thumbUrl} />
                       </Link>
                     </div>
                   </div>
