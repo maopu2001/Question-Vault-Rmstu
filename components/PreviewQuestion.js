@@ -10,7 +10,7 @@ const CloseIcon = (
 
 export default function PreviewQuestion({ pages, setPreview }) {
   return (
-    <div className="bg-opacity-20 backdrop-blur-lg overflow-auto fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-white flex">
+    <div className="bg-opacity-20 backdrop-blur-lg overflow-auto fixed z-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-white flex">
       <div className="m-auto z-20 relative w-[95%] h-[95%] rounded-xl p-2">
         <div className="absolute right-1 top-1 flex gap-2">
           <Button

@@ -73,109 +73,118 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
   };
 
   return (
-    <div className="sm:w-[90%] grid md:grid-cols-2 grid-cols-1 gap-4 my-4 mx-auto">
+    <div className="md:w-[40%] w-[95%] grid grid-cols-1 gap-4 my-4 mx-auto">
       {isLoading && <Loading />}
-      {questionList.map((ques, i) => {
-        return (
-          <div className="relative border-2 border-primary-300 rounded-md shadow-lg p-4" key={i}>
-            <h1 className="font-bold w-fit mb-3 shadow-lg px-12 py-2 rounded-xl">Question Information</h1>
-            <div className="flex gap-5">
-              <table className="p-4 w-full" key={i}>
-                <tbody>
-                  <tr>
-                    <th className="text-right pr-3">Department:</th>
-                    <td>{ques.department}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Degree:</th>
-                    <td>{ques.degree}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Semester:</th>
-                    <td>{ques.semester}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Course:</th>
-                    <td>{ques.course}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Exam:</th>
-                    <td>{ques.exam}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Session:</th>
-                    <td>{ques.session}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Total Page:</th>
-                    <td>{ques.fileList.length}</td>
-                  </tr>
-
-                  <tr>
-                    <th colSpan={2}>
-                      <h1 className="font-bold w-fit mb-3 shadow-lg px-12 py-2 rounded-xl">Create Information</h1>
-                    </th>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Name:</th>
-                    <td>{ques.createdBy.name}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Department:</th>
-                    <td>{ques.createdBy.department}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Session:</th>
-                    <td>{ques.createdBy.session}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Degree Type:</th>
-                    <td>{ques.createdBy.degree}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Created At:</th>
-                    <td>{convertUSTtoBST(ques.createdAt)}</td>
-                  </tr>
-                  <tr>
-                    <th className="text-right pr-3">Updated At:</th>
-                    <td>{convertUSTtoBST(ques.updatedAt)}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="flex flex-col gap-2 absolute sm:right:5 right-2 top-5">
-                {role === 'editor' && (
-                  <Button
-                    onClick={() => handleEdit(ques._id)}
-                    className="bg-primary-400 hover:bg-primary-500 rounded-full w-12 h-12 p-0"
-                  >
-                    {EditorIcon}
-                  </Button>
-                )}
-                {ques.fileList.length > 0 && (
-                  <React.Fragment>
+      {questionList.length < 1 && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
+      {questionList.length > 0 &&
+        questionList.map((ques, i) => {
+          return (
+            <div className="border-2 border-primary-300 rounded-md shadow-lg p-4" key={i}>
+              <div className="relative flex flex-col gap-5">
+                <div className="w-full border-2 border-primary-800 px-4 py-2 rounded-lg">
+                  <h1 className="font-bold w-fit mb-2 shadow-lg px-6 py-2 rounded-xl">Question Information</h1>
+                  <table key={i}>
+                    <tbody>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Department:</th>
+                        <td>{ques.department}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Degree:</th>
+                        <td>{ques.degree}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Semester:</th>
+                        <td>{ques.semester}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Course:</th>
+                        <td>{ques.course}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Exam:</th>
+                        <td>{ques.exam}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Session:</th>
+                        <td>{ques.session}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Total Page:</th>
+                        <td>{ques.fileList.length}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="w-full border-2 border-primary-800 px-4 py-2 rounded-lg">
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th colSpan={2}>
+                          <h1 className="font-bold w-fit mb-2 shadow-lg px-6 py-2 rounded-xl">Upload Information</h1>
+                        </th>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Name:</th>
+                        <td>{ques.createdBy.name}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Department:</th>
+                        <td>{ques.createdBy.department}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Session:</th>
+                        <td>{ques.createdBy.session}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Degree Type:</th>
+                        <td>{ques.createdBy.degree}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Created At:</th>
+                        <td>{convertUSTtoBST(ques.createdAt)}</td>
+                      </tr>
+                      <tr>
+                        <th className="text-nowrap text-right pr-2">Updated At:</th>
+                        <td>{convertUSTtoBST(ques.updatedAt)}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div className="flex md:flex-row flex-col gap-2 absolute right-2 top-2">
+                  {role === 'editor' && (
                     <Button
-                      onClick={() => handlePreview(ques)}
-                      className="bg-primary-400 hover:bg-primary-500 rounded-full w-12 h-12 p-0"
+                      onClick={() => handleEdit(ques._id)}
+                      className="bg-primary-400 hover:bg-primary-500 rounded-full w-8 h-8 p-0"
                     >
-                      {PreviewIcon}
+                      {EditorIcon}
                     </Button>
-                    <Button
-                      onClick={() => handleDownload(ques)}
-                      className="bg-green-400 hover:bg-green-500 rounded-full w-12 h-12 p-0"
-                    >
-                      {DownloadIcon}
-                    </Button>
-                  </React.Fragment>
-                )}
-                {(role === 'superadmin' || role === 'editor') && (
-                  <DeleteQuestion id={ques._id} setQuestionList={setQuestionList} />
-                )}
+                  )}
+                  {ques.fileList.length > 0 && (
+                    <React.Fragment>
+                      <Button
+                        onClick={() => handlePreview(ques)}
+                        className="bg-primary-400 hover:bg-primary-500 rounded-full w-8 h-8 p-0"
+                      >
+                        {PreviewIcon}
+                      </Button>
+                      <Button
+                        onClick={() => handleDownload(ques)}
+                        className="bg-green-400 hover:bg-green-500 rounded-full w-8 h-8 p-0"
+                      >
+                        {DownloadIcon}
+                      </Button>
+                    </React.Fragment>
+                  )}
+                  {(role === 'superadmin' || role === 'editor') && (
+                    <DeleteQuestion id={ques._id} setQuestionList={setQuestionList} />
+                  )}
+                </div>
               </div>
+              {preview && <PreviewQuestion pages={pages} setPreview={setPreview} />}
             </div>
-            {preview && <PreviewQuestion pages={pages} setPreview={setPreview} />}
-          </div>
-        );
-      })}
+          );
+        })}
     </div>
   );
 }

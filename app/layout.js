@@ -1,7 +1,8 @@
 import Footer from '@/app/Footer';
-import './globals.css';
 import Header from '@/app/Header';
 import { Toaster } from '@/components/ui/toaster';
+import './globals.css';
+import GoToTopBtn from '@/components/GoToTopBtn';
 
 export const metadata = {
   title: 'Exam Question Repo RMSTU',
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         <main className="pt-20 pb-10">{children}</main>
+        <GoToTopBtn />
         <Footer />
         <Toaster />
       </body>

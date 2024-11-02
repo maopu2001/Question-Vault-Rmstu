@@ -4,7 +4,6 @@ import getNonHttpCookies from '@/lib/getNonHttpCookies';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import './navbar.css';
-import jwtVerify from '@/lib/jwtVerify';
 
 const MenuIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
@@ -91,7 +90,7 @@ export default function Header() {
 
   const toggleSideBar = () => {
     setSideBarRendered(true);
-    const sidebar = document.querySelector('sidebar');
+    const sidebar = document.querySelector('#sidebar');
     if (sidebar) sidebar.classList.toggle('open');
   };
 
@@ -115,7 +114,7 @@ export default function Header() {
   return (
     <header className="fixed h-20 w-full flex items-center justify-center sm:justify-start bg-primary-800 text-white p-4 top-0 z-10">
       <h1 className="select-none text-2xl font-bold sm:ml-12 p-2 rounded-md">Exam Question Repo</h1>
-      <navbar className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
+      <nav className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
         {role === '' && <Link href="/">Home</Link>}
         {role === 'admin' && <Link href="/admin/dashboard">Dashboard</Link>}
         {role === 'superadmin' && <Link href="/superadmin/dashboard">Dashboard</Link>}
@@ -130,7 +129,7 @@ export default function Header() {
             Logout
           </Link>
         )}
-      </navbar>
+      </nav>
       <button
         id="menu-icon"
         onClick={toggleSideBar}
@@ -139,7 +138,10 @@ export default function Header() {
         {MenuIcon}
       </button>
       {sideBarRendered && (
-        <sidebar className="fixed z-50 pt-10 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg open">
+        <nav
+          id="sidebar"
+          className="fixed z-50 pt-10 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg open"
+        >
           <button id="close-icon" onClick={toggleSideBar} className="w-12 h-12 my-4 rounded-full p-2">
             {CloseIcon}
           </button>
@@ -197,7 +199,7 @@ export default function Header() {
               </Link>
             )}
           </ul>
-        </sidebar>
+        </nav>
       )}
     </header>
   );

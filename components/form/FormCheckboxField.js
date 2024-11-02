@@ -1,7 +1,5 @@
-import React from 'react';
-import { FormItem, FormLabel } from '../ui/form';
-import { Label } from '../ui/label';
 import { Checkbox } from '../ui/checkbox';
+import { Label } from '../ui/label';
 
 export default function FormCheckboxField({ data }) {
   const { label, arr, setFilteredArr } = data;
@@ -12,11 +10,11 @@ export default function FormCheckboxField({ data }) {
   };
 
   return (
-    <FormItem>
-      <FormLabel>
+    <div>
+      <div className="mb-2">
         {label} <span className="text-primary-500 text-xs font-thin select-none">- Optional</span>
-      </FormLabel>
-      <div className="flex flex-col gap-3">
+      </div>
+      <div className="mt-2 flex flex-col gap-3">
         {arr.map((item, i) => {
           return (
             <div key={i} className="flex items-center gap-1">
@@ -28,6 +26,6 @@ export default function FormCheckboxField({ data }) {
           );
         })}
       </div>
-    </FormItem>
+    </div>
   );
 }

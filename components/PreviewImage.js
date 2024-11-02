@@ -79,7 +79,7 @@ export default function PreviewImage({ data, setPreview }) {
   };
 
   return (
-    <div className=" bg-opacity-20 backdrop-blur-lg overflow-auto fixed z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-white flex">
+    <div className=" bg-opacity-20 backdrop-blur-lg overflow-auto fixed z-40 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-white flex">
       {isLoading && <Loading />}
       {image && (
         <div className="m-auto z-20 relative md:w-fit md:h-[95%] w-[95%] h-fit rounded-xl p-2">

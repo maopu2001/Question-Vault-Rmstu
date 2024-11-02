@@ -1,17 +1,12 @@
 'use client';
-import FormCheckboxField from '@/components/form/FormCheckboxField';
 import FormSelectField from '@/components/form/FormSelectField';
 import { Button } from '@/components/ui/button';
 import { Form } from '@/components/ui/form';
-import Loading from '@/components/ui/Loading';
-import { toast } from '@/hooks/use-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import QuestionListTable from '@/components/QuestionListTable';
-import { set } from 'mongoose';
 
 const FormSchema = z.object({
   degree: z.string().min(1, { message: 'Please select a degree type.' }),
@@ -21,8 +16,6 @@ const FormSchema = z.object({
 });
 
 export default function SearchQuestion() {
-  const [questionList, setQuestionList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm({
@@ -37,19 +30,11 @@ export default function SearchQuestion() {
 
   const watchFaculty = form.watch('faculty');
   const watchDegree = form.watch('degree');
-  const watchDepartment = form.watch('department');
-  const watchSemester = form.watch('semester');
 
   const [faculties, setFaculties] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [degrees, setDegrees] = useState([]);
   const [semesters, setSemesters] = useState([]);
-  const [courses, setCourses] = useState([]);
-
-  const [sessions, setSessions] = useState([]);
-  const [filteredSessions, setFilteredSessions] = useState([]);
-  const [filteredExams, setFilteredExams] = useState([]);
-  const [filteredCourses, setFilteredCourses] = useState([]);
 
   //setting faculties
   useEffect(() => {
@@ -122,44 +107,6 @@ export default function SearchQuestion() {
     fetchSemesters();
   }, [watchDegree]);
 
-  //setting courses
-  useEffect(() => {
-    const fetchSemesters = async () => {
-      try {
-        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=course');
-        const resData = await res.json();
-        const data = resData.data.reduce((acc, item) => {
-          if (
-            item.semester.semester === watchSemester &&
-            item.semester.degree.degreeCode === watchDegree &&
-            item.department.departmentTitle === watchDepartment
-          )
-            acc.push(`${item.courseTitle} (${item.courseCode})`);
-          return acc;
-        }, []);
-
-        setCourses(data);
-      } catch (error) {
-        setCourses([]);
-      }
-    };
-    fetchSemesters();
-  }, [watchDegree, watchDepartment, watchSemester]);
-
-  //setting sessions
-  useEffect(() => {
-    const fetchSessions = async () => {
-      try {
-        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=session');
-        const resData = await res.json();
-        setSessions(resData.data);
-      } catch (error) {
-        setSessions([]);
-      }
-    };
-    fetchSessions();
-  }, []);
-
   //data for input field
   const degreeData = {
     label: 'Degree Type',
@@ -189,74 +136,26 @@ export default function SearchQuestion() {
     arr: departments,
   };
 
-  const courseData = {
-    label: 'Course',
-    arr: courses,
-    setFilteredArr: setFilteredCourses,
-  };
-
-  // data for checkboxes
-  const sessionData = {
-    label: 'Session',
-    arr: sessions,
-    setFilteredArr: setFilteredSessions,
-  };
-
-  const examData = {
-    label: 'Exam',
-    arr: ['Midterm - 1', 'Midterm - 2', 'Semester Final'],
-    setFilteredArr: setFilteredExams,
-  };
-
   const onSubmit = async (data) => {
-    const body = { ...data, exams: filteredExams, sessions: filteredSessions, courses: filteredCourses };
-    setIsLoading(true);
-    try {
-      const res = await fetch('/api/searchQuestion', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) {
-        const resData = await res.json();
-        throw Error(resData.message);
-      }
-      const resData = await res.json();
-      setQuestionList([...resData.data]);
-      setIsLoading(false);
-    } catch (error) {
-      toast({
-        title: error.message,
-        className: 'bg-red-500 text-white',
-      });
-      setQuestionList([]);
-      setIsLoading(false);
-    }
+    router.push(
+      `/question?faculty=${data.faculty}&department=${data.department}&degree=${data.degree}&semester=${data.semester}`
+    );
   };
 
   return (
     <div className="mx-auto sm:w-5/6 w-[95%]">
-      {isLoading && <Loading />}
-      {(questionList.length < 1 && (
-        <Form {...form}>
-          <h1 className="text-2xl font-bold py-3 text-center">Search Question</h1>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="sm:w-1/2 w-full space-y-2 mx-auto">
-            <FormSelectField formControl={form.control} data={facultyData} />
-            <FormSelectField formControl={form.control} data={departmentData} />
-            <FormSelectField formControl={form.control} data={degreeData} />
-            <FormSelectField formControl={form.control} data={semesterData} />
-
-            <FormCheckboxField data={courseData} />
-            <FormCheckboxField data={sessionData} />
-            <FormCheckboxField data={examData} />
-            <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
-              Search
-            </Button>
-          </form>
-        </Form>
-      )) || <QuestionListTable questionList={questionList} setQuestionList={setQuestionList} />}
+      <Form {...form}>
+        <h1 className="text-2xl font-bold py-3 text-center">Search Question</h1>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="sm:w-1/2 w-full space-y-2 mx-auto">
+          <FormSelectField formControl={form.control} data={facultyData} />
+          <FormSelectField formControl={form.control} data={departmentData} />
+          <FormSelectField formControl={form.control} data={degreeData} />
+          <FormSelectField formControl={form.control} data={semesterData} />
+          <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
+            Search
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }
