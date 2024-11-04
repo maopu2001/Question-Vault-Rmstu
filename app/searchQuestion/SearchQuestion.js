@@ -137,6 +137,7 @@ export default function SearchQuestion() {
   };
 
   const onSubmit = async (data) => {
+    
     router.push(
       `/question?faculty=${data.faculty}&department=${data.department}&degree=${data.degree}&semester=${data.semester}`
     );

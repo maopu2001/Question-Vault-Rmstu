@@ -77,21 +77,23 @@ export default function test() {
   return (
     <Form {...form}>
       {isLoading && <Loading />}
-      <h1 className="text-2xl font-bold pt-3 uppercase">Log In</h1>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2 my-3">
-        <FormTextField formControl={form.control} data={usernameEmailData} />
-        <FormTextField formControl={form.control} data={passwordData} />
-        <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
-          Log In
-        </Button>
-      </form>
-      <ForgotPassword />
-      <p className="text-sm">
-        New User?{' '}
-        <Link href="/signup" className="font-bold">
-          Sign Up
-        </Link>
-      </p>
+      <div className="md:w-1/2 w-[95%]">
+        <h1 className="text-2xl font-bold pt-3 uppercase text-center">Log In</h1>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2 my-3">
+          <FormTextField formControl={form.control} data={usernameEmailData} />
+          <FormTextField formControl={form.control} data={passwordData} />
+          <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
+            Log In
+          </Button>
+        </form>
+        <ForgotPassword />
+        <p className="text-sm text-center">
+          New User?{' '}
+          <Link href="/signup" className="font-bold">
+            Sign Up
+          </Link>
+        </p>
+      </div>
     </Form>
   );
 }

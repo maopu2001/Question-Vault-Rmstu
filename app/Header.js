@@ -86,7 +86,7 @@ export default function Header() {
       }
     };
     setRoleFromToken();
-  });
+  }, [role]);
 
   const toggleSideBar = () => {
     setSideBarRendered(true);
@@ -103,7 +103,6 @@ export default function Header() {
       });
       return;
     }
-    localStorage.removeItem('role');
     toast({
       title: 'Logged out successfully',
       className: 'bg-green-500 text-white',
@@ -112,8 +111,8 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed h-20 w-full flex items-center justify-center sm:justify-start bg-primary-800 text-white p-4 top-0 z-10">
-      <h1 className="select-none text-2xl font-bold sm:ml-12 p-2 rounded-md">Exam Question Repo</h1>
+    <header className="fixed h-20 w-full flex items-center justify-center md:justify-start bg-primary-800 text-white p-4 top-0 z-10">
+      <h1 className="select-none text-2xl font-bold md:ml-12 p-2 rounded-md">Exam Question Repo</h1>
       <nav className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
         {role === '' && <Link href="/">Home</Link>}
         {role === 'admin' && <Link href="/admin/dashboard">Dashboard</Link>}

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Checkbox } from '../ui/checkbox';
 import { Label } from '../ui/label';
 
@@ -18,7 +19,7 @@ export default function FormCheckboxField({ data }) {
         {arr.map((item, i) => {
           return (
             <div key={i} className="flex items-center gap-1">
-              <Checkbox id={item} onCheckedChange={(e) => handleChange(e, item)} />
+              <Checkbox id={item} defaultChecked={false} onCheckedChange={(e) => handleChange(e, item)} />
               <Label className="font-normal" htmlFor={item}>
                 {item}
               </Label>

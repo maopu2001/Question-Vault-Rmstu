@@ -1,20 +1,18 @@
 'use client';
 import FormCheckboxField from '@/components/form/FormCheckboxField';
 import QuestionListTable from '@/components/QuestionListTable';
+import { Button } from '@/components/ui/button';
 import Loading from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/separator';
+import { toast } from '@/hooks/use-toast';
+import imageUrlToBundlePdf from '@/lib/imgUrlToBundlePdf';
+import { set } from 'mongoose';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-const MenuIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
-    <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-  </svg>
-);
-
-const CloseIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
-    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+const DownloadIcon = (
+  <svg width="24px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M480-320 280-520l56-58 104 104v-326h80v326l104-104 56 58-200 200ZM240-160q-33 0-56.5-23.5T160-240v-120h80v120h480v-120h80v120q0 33-23.5 56.5T720-160H240Z" />
   </svg>
 );
 
@@ -25,7 +23,6 @@ export default function SearchResult() {
   const degree = searchParams.get('degree');
   const semester = searchParams.get('semester');
   const payload = { faculty, department, degree, semester };
-  console.log(payload);
 
   const [questionList, setQuestionList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -126,20 +123,113 @@ export default function SearchResult() {
     setFilteredArr: setFilteredExams,
   };
 
-  return (
-    <div className="my-5">
-      {isLoading && <Loading />}
-      <nav className="lg:block lg:mx-3 lg:fixed left-5 font-semibold text-lg mx-5">
-        <form className="flex flex-col gap-2 w-full p-4 rounded-lg bg-primary-100 border-2 border-primary-900">
-          <FormCheckboxField data={courseData} />
-          <Separator className="mx-2" orientation="vertical" />
-          <FormCheckboxField data={sessionData} />
-          <Separator className="mx-2" orientation="vertical" />
-          <FormCheckboxField data={examData} />
-        </form>
-      </nav>
+  const resetForm = (e) => {
+    e.preventDefault();
+    setFilteredCourses([]);
+    setFilteredSessions([]);
+    setFilteredExams([]);
+  };
 
-      <QuestionListTable questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
+  const handleBundleDownload = async (session) => {
+    setIsLoading(true);
+    const filteredQuestionList = questionList.filter((ques) => ques.session === session);
+    const fileIdList = {
+      mid1: filteredQuestionList
+        .filter((ques) => ques.exam === 'Midterm - 1')
+        .map((ques) => ques.fileList.map((file) => file.id)),
+      mid2: filteredQuestionList
+        .filter((ques) => ques.exam === 'Midterm - 2')
+        .map((ques) => ques.fileList.map((file) => file.id)),
+      final: filteredQuestionList
+        .filter((ques) => ques.exam === 'Semester Final')
+        .map((ques) => ques.fileList.map((file) => file.id)),
+    };
+
+    try {
+      const res = await fetch(`/api/searchQuestionBundle`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(fileIdList),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message);
+      }
+
+      const resData = await res.json();
+      const { mid1Questions, mid2Questions, finalQuestions } = resData.data;
+
+      const imageUrlList = {
+        mid1: mid1Questions.map((file) => file.imageUrl),
+        mid2: mid2Questions.map((file) => file.imageUrl),
+        final: finalQuestions.map((file) => file.imageUrl),
+      };
+
+      const name = `${semester} (${session}) - ${department} - ${degree}`;
+      imageUrlToBundlePdf(imageUrlList, name);
+      setIsLoading(false);
+      toast({
+        title: 'Downloaded Successfully',
+        className: 'bg-green-500 text-white',
+      });
+    } catch (error) {
+      toast({
+        title: error.message || 'Something went wrong',
+        className: 'bg-red-500 text-white',
+      });
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="my-5 flex flex-col gap-2">
+      {isLoading && <Loading />}
+      {!questionList && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
+      {questionList && (
+        <>
+          <nav className="lg:mx-3 lg:fixed left-5 font-semibold text-lg mx-5">
+            <form
+              className="flex flex-col gap-2 w-full p-4 rounded-lg bg-primary-100 border-2 border-primary-900"
+              onReset={resetForm}
+            >
+              <FormCheckboxField data={courseData} />
+              <Separator className="mx-2" orientation="vertical" />
+              <FormCheckboxField data={sessionData} />
+              <Separator className="mx-2" orientation="vertical" />
+              <FormCheckboxField data={examData} />
+              <Button type="reset" className="w-full px-8 mt-2 mx-auto bg-primary-700 hover:bg-primary-800">
+                Reset
+              </Button>
+            </form>
+          </nav>
+
+          <nav className="lg:mx-3 lg:fixed right-5 font-semibold text-lg mx-5 ">
+            <div className="w-full border-2 border-primary-800 rounded-xl p-4 bg-primary-100 flex flex-col gap-2">
+              <h1 className="text-center">Download Question Bundle</h1>
+              <h2 className="text-center text-base font-normal">Midterm 1 + Midterm 2 + Semester Final</h2>
+              {sessions &&
+                sessions.length > 0 &&
+                sessions.map((session) => {
+                  return (
+                    <Button
+                      key={session}
+                      onClick={() => handleBundleDownload(session)}
+                      className="w-full px-8 mx-auto bg-primary-700 hover:bg-primary-800"
+                    >
+                      {session}
+                      <span className="ml-3">{DownloadIcon}</span>
+                    </Button>
+                  );
+                })}
+            </div>
+          </nav>
+
+          <QuestionListTable questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
+        </>
+      )}
     </div>
   );
 }

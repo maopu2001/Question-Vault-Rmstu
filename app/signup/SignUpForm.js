@@ -235,30 +235,32 @@ export default function SignUpForm() {
   return (
     <Form {...form}>
       {isLoading && <Loading />}
-      <h1 className="text-2xl font-bold pt-3 uppercase">Sign Up</h1>
-      <p className="w-1/2 min-w-96 text-center text-primary-400 font-semibold text-sm">
-        Note: These informations can not be changed after creating the account. Please, be extra careful.
-      </p>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-1/2 min-w-96 space-y-2 my-3">
-        <FormTextField formControl={form.control} data={nameData} />
-        <FormTextField formControl={form.control} data={usernameData} />
-        <FormTextField formControl={form.control} data={emailData} />
-        <FormSelectField formControl={form.control} data={facultyData} />
-        <FormSelectField formControl={form.control} data={departmentData} />
-        <FormSelectField formControl={form.control} data={degreeData} />
-        <FormTextField formControl={form.control} data={sessionData} />
-        <FormTextField formControl={form.control} data={passwordData} />
-        <FormTextField formControl={form.control} data={confirmPasswordData} />
-        <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
-          Sign Up
-        </Button>
-      </form>
-      <p className="text-sm">
-        Already have an account?{' '}
-        <Link href="/login" className="font-bold">
-          Log In
-        </Link>
-      </p>
+      <div className="md:w-1/2 w-[95%]">
+        <h1 className="text-2xl font-bold pt-3 uppercase text-center">Sign Up</h1>
+        <p className="text-center text-primary-400 font-semibold text-sm">
+          Note: These informations can not be changed after creating the account. Please, be extra careful.
+        </p>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-2 my-3">
+          <FormTextField formControl={form.control} data={nameData} />
+          <FormTextField formControl={form.control} data={usernameData} />
+          <FormTextField formControl={form.control} data={emailData} />
+          <FormSelectField formControl={form.control} data={facultyData} />
+          <FormSelectField formControl={form.control} data={departmentData} />
+          <FormSelectField formControl={form.control} data={degreeData} />
+          <FormTextField formControl={form.control} data={sessionData} />
+          <FormTextField formControl={form.control} data={passwordData} />
+          <FormTextField formControl={form.control} data={confirmPasswordData} />
+          <Button className="bg-primary-800 hover:bg-primary-600 w-full" type="submit">
+            Sign Up
+          </Button>
+        </form>
+        <p className="text-sm text-center">
+          Already have an account?{' '}
+          <Link href="/login" className="font-bold">
+            Log In
+          </Link>
+        </p>
+      </div>
     </Form>
   );
 }

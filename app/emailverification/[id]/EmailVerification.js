@@ -67,13 +67,14 @@ export default function EmailVerification({ id }) {
   };
 
   return (
-    <div className="flex flex-col items-center w-4/5 mx-auto">
+    <div className="flex flex-col items-center w-4/5 mx-auto h-full my-4">
       {isLoading && <Loading />}
       <h1 className="text-center font-bold text-2xl py-2"> Email Verification</h1>
       <p className="text-lg text-center">
         An email has been sent to your email account. Please, check your inbox and input the 6 digit OTP here. The OTP
         will expire in 24 hours.
       </p>
+
       <Input
         onChange={(e) => setRandomNumber(e.target.value)}
         className="bg-primary-200 border border-primary-700 w-48 mx-auto mt-5 mb-2 p-3 text-center"
@@ -88,6 +89,15 @@ export default function EmailVerification({ id }) {
           Resend
         </Button>
       </p>
+      <div className="text-md text-center my-2 bg-primary-100 rounded-lg p-4 shadow-xl font-semibold text-red-800 text-pretty">
+        <h2 className="text-lg font-bold mb-2">!!Warning!!</h2>
+        <p>
+          This Email Verification System is built using Google's free tier Gmail Service. So, sometimes the mail may
+          take some time to arrive, like <span className="font-bold">15 minutes</span> to arrive. Please, check your{' '}
+          <span className="font-bold">Spam</span> folder too. The Verification Link and Code both will be present in the
+          email. <span className="font-bold">If more than 30 minutes has passed, try again.</span>
+        </p>
+      </div>
     </div>
   );
 }

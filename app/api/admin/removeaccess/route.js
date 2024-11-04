@@ -23,18 +23,17 @@ export async function GET(req) {
       role: auth.role,
     };
 
-    const newToken = await jwtSign(newPayload, process.env.JWT_SECRET, { expirationTime: '24h' });
+    const newToken = await jwtSign(newPayload, process.env.JWT_SECRET);
 
     const cookieOptions = {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 24,
       path: '/',
     };
 
     cookies().set('token', newToken, cookieOptions);
 
-    const newRole = await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET, { expirationTime: '24h' });
+    await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET);
 
     return NextResponse.json({ message: 'Admin access has been revoked' }, { status: 200 });
   } catch (err) {

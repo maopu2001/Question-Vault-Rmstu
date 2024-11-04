@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const CloseIcon = (
   <svg width="18px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="white">
@@ -22,7 +22,7 @@ export default function PreviewQuestion({ pages, setPreview }) {
         </div>
         <div className="h-full">
           <h1 className="text-center text-2xl font-bold">Question Preview</h1>
-          <div className="grid md:grid-cols-2 grid-cols-1 gap-4 mt-4">
+          <div className="flex flex-col gap-4 mt-4">
             {pages.length > 0 &&
               pages.map((page, i) => {
                 return (

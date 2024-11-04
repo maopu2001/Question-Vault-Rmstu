@@ -75,8 +75,8 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
   return (
     <div className="md:w-[40%] w-[95%] grid grid-cols-1 gap-4 my-4 mx-auto">
       {isLoading && <Loading />}
-      {questionList.length < 1 && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
-      {questionList.length > 0 &&
+      {questionList?.length < 1 && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
+      {questionList?.length > 0 &&
         questionList.map((ques, i) => {
           return (
             <div className="border-2 border-primary-300 rounded-md shadow-lg p-4" key={i}>

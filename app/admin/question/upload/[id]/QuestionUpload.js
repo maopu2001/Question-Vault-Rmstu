@@ -14,7 +14,7 @@ import convertUSTtoBST from '@/lib/convertUSTtoBST';
 
 export default function QuestionUpload({ id }) {
   const [isLoading, setIsLoading] = useState(true);
-  const [totalPage, setTotalPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
   const [upload, setUpload] = useState(0);
   const [uploadFinished, setUploadFinished] = useState(0);
   const [quesInfo, setQuesInfo] = useState(null);

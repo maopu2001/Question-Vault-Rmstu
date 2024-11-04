@@ -49,14 +49,16 @@ export default function ForgotPassword() {
 
   return (
     <Dialog>
-      <DialogTrigger className="hover:underline underline-offset-4 mx-auto text-sm font-semibold">
-        Forgot Password
-      </DialogTrigger>
+      {isLoading && <Loading />}
+      <div className="text-center">
+        <DialogTrigger className="hover:underline underline-offset-4 w-fit text-center text-sm font-semibold">
+          Forgot Password
+        </DialogTrigger>
+      </div>
       <DialogContent className="w-1/2 min-w-[350px] rounded-lg">
         <DialogHeader>
           <DialogTitle>Forgot Password</DialogTitle>
         </DialogHeader>
-        {isLoading && <Loading />}
         <Input
           onChange={(e) => setEmail(e.target.value)}
           className="w-full"

@@ -26,18 +26,17 @@ export async function POST(req) {
       role: auth.role,
     };
 
-    const token = await jwtSign(payload, process.env.JWT_SECRET, { expirationTime: '24h' });
+    const token = await jwtSign(payload, process.env.JWT_SECRET);
 
     const cookieOptions = {
       httpOnly: true,
       secure: true,
-      maxAge: 60 * 60 * 24,
       path: '/',
     };
 
     cookies().set('token', token, cookieOptions);
 
-    const role = await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET, { expirationTime: '24h' });
+    const role = await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET);
 
     const nonHttpCookieOptions = {
       maxAge: 60 * 60 * 24,

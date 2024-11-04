@@ -6,7 +6,7 @@ export const metadata = {
 
 export default function Upload({ params }) {
   return (
-    <div className="my-2 mx-auto w-full min-w-[400px]">
+    <div className="my-2 mx-auto w-[98%]">
       <QuestionUpload id={params.id} />
     </div>
   );
