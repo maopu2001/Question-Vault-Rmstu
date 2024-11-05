@@ -21,8 +21,7 @@ nav > a:hover {
   @apply bg-slate-700 rounded-xl p-3;
   transition: all 0.2s ease-in-out;
 }
-#menu-icon:hover,
-#close-icon:hover {
+#menu-icon:hover {
   svg {
     fill: orange;
     transition: all 0.3s ease-in-out;
@@ -32,7 +31,6 @@ nav > a:hover {
 }
 
 #menu-icon:active,
-#close-icon:active,
 #sidebar > ul > a:active,
 nav > a:active {
   transform: scale(0.9);
@@ -44,6 +42,7 @@ nav > a:active {
   right: -100%;
   animation: slideOut 0.3s ease-in;
 }
+
 #sidebar.open {
   right: 0;
   animation: slideIn 0.3s ease-out;
@@ -67,8 +66,7 @@ nav > a:active {
   }
 }
 
-#menu-icon,
-#close-icon {
+#menu-icon {
   svg {
     transition: all 0.3s ease-in-out;
   }

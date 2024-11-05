@@ -7,13 +7,7 @@ import './navbar.css';
 
 const MenuIcon = (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
-    <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
-  </svg>
-);
-
-const CloseIcon = (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
-    <path d="m256-200-56-56 224-224-224-224 56-56 224 224 224-224 56 56-224 224 224 224-56 56-224-224-224 224Z" />
+    <path d="M120-240v-80h520v80H120Zm664-40L584-480l200-200 56 56-144 144 144 144-56 56ZM120-440v-80h400v80H120Zm0-200v-80h520v80H120Z" />
   </svg>
 );
 
@@ -89,7 +83,7 @@ export default function Header() {
   }, [role]);
 
   const toggleSideBar = () => {
-    setSideBarRendered(true);
+    setSideBarRendered((p) => !p);
     const sidebar = document.querySelector('#sidebar');
     if (sidebar) sidebar.classList.toggle('open');
   };
@@ -132,19 +126,18 @@ export default function Header() {
       <button
         id="menu-icon"
         onClick={toggleSideBar}
-        className="rounded-xl lg:hidden block absolute right-5 w-12 h-12 p-2"
+        className={`rounded-xl lg:hidden block absolute z-40 right-5 w-12 h-12 p-2 ${
+          sideBarRendered ? 'rotate-180' : ''
+        }`}
       >
         {MenuIcon}
       </button>
       {sideBarRendered && (
         <nav
           id="sidebar"
-          className="fixed z-50 pt-10 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg open"
+          className="fixed z-30 pt-20 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg open"
         >
-          <button id="close-icon" onClick={toggleSideBar} className="w-12 h-12 my-4 rounded-full p-2">
-            {CloseIcon}
-          </button>
-          <ul className="flex flex-col items-start gap-4 list-none *:w-full">
+          <ul className="flex flex-col items-end gap-4 list-none *:w-full">
             {role === '' && (
               <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
                 {HomeIcon} Home

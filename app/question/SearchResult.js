@@ -1,12 +1,12 @@
 'use client';
 import FormCheckboxField from '@/components/form/FormCheckboxField';
 import QuestionListTable from '@/components/QuestionListTable';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import Loading from '@/components/ui/Loading';
 import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import imageUrlToBundlePdf from '@/lib/imgUrlToBundlePdf';
-import { set } from 'mongoose';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -185,32 +185,54 @@ export default function SearchResult() {
   };
 
   return (
-    <div className="my-5 grid lg:grid-cols-[1fr,auto,auto,1fr] lg:gap-1 gap-4 lg:h-[calc(100vh-10em)] -z-10">
+    <div className="my-5 grid lg:grid-cols-[1fr,1fr,1fr,1fr] gap-4 lg:h-[calc(100vh-10em)] w-full">
       {isLoading && <Loading />}
       {!questionList && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
       {questionList && (
         <>
-          <nav className="lg:mx-3 left-5 font-semibold text-lg mx-5 lg:sticky lg:top-0">
-            <form
-              className="flex flex-col gap-2 w-full p-4 rounded-lg bg-primary-100 border-2 border-primary-900"
-              onReset={resetForm}
-            >
-              <FormCheckboxField data={courseData} />
-              <Separator className="mx-2" orientation="vertical" />
-              <FormCheckboxField data={sessionData} />
-              <Separator className="mx-2" orientation="vertical" />
-              <FormCheckboxField data={examData} />
+          <nav className="lg:col-span-1 lg:order-1 w-[95%] mx-auto font-semibold text-lg rounded-lg bg-primary-100 border-2 border-primary-900 py-4 lg:mx-3 lg:sticky lg:top-0 lg:left-5">
+            <h1 className="text-center">Filter Questions</h1>
+            <form className="flex flex-col gap-2 w-full px-4" onReset={resetForm}>
+              <Accordion type="single" collapsible className="w-full" defaultValue="item-1">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="p-0 hover:no-underline py-2">
+                    <span>
+                      Course <span className="text-primary-500 text-xs font-thin select-none">- Optional</span>
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <FormCheckboxField data={courseData} />
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-2">
+                  <AccordionTrigger className="p-0 hover:no-underline py-2">
+                    <span>
+                      Session <span className="text-primary-500 text-xs font-thin select-none">- Optional</span>
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <FormCheckboxField data={sessionData} />
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="item-3">
+                  <AccordionTrigger className="p-0 hover:no-underline py-2">
+                    <span>
+                      Exam <span className="text-primary-500 text-xs font-thin select-none">- Optional</span>
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <FormCheckboxField data={examData} />
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+
               <Button type="reset" className="w-full px-8 mt-2 mx-auto bg-primary-700 hover:bg-primary-800">
                 Reset
               </Button>
             </form>
           </nav>
 
-          <div className="lg:col-span-2 mx-auto overflow-auto no-scroll">
-            <QuestionListTable className="" questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
-          </div>
-
-          <nav className="lg:mx-3 right-5 font-semibold text-lg mx-5 lg:sticky lg:top-0">
+          <nav className="lg:col-span-1 lg:order-4 w-[95%] mx-auto font-semibold text-lg lg:mx-3 lg:sticky lg:top-0 lg:right-5">
             <div className="w-full border-2 border-primary-800 rounded-xl p-4 bg-primary-100 flex flex-col gap-2">
               <h1 className="text-center">Download Question Bundle</h1>
               <h2 className="text-center text-base font-normal">Midterm 1 + Midterm 2 + Semester Final</h2>
@@ -230,6 +252,10 @@ export default function SearchResult() {
                 })}
             </div>
           </nav>
+
+          <div className="lg:col-span-2 lg:order-2 mx-auto overflow-auto no-scroll w-full">
+            <QuestionListTable className="" questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
+          </div>
         </>
       )}
     </div>
