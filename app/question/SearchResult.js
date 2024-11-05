@@ -185,12 +185,12 @@ export default function SearchResult() {
   };
 
   return (
-    <div className="my-5 flex flex-col gap-2">
+    <div className="my-5 grid lg:grid-cols-[1fr,auto,auto,1fr] lg:gap-1 gap-4 lg:h-[calc(100vh-10em)] -z-10">
       {isLoading && <Loading />}
       {!questionList && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
       {questionList && (
         <>
-          <nav className="lg:mx-3 lg:fixed left-5 font-semibold text-lg mx-5">
+          <nav className="lg:mx-3 left-5 font-semibold text-lg mx-5 lg:sticky lg:top-0">
             <form
               className="flex flex-col gap-2 w-full p-4 rounded-lg bg-primary-100 border-2 border-primary-900"
               onReset={resetForm}
@@ -206,7 +206,11 @@ export default function SearchResult() {
             </form>
           </nav>
 
-          <nav className="lg:mx-3 lg:fixed right-5 font-semibold text-lg mx-5 ">
+          <div className="lg:col-span-2 mx-auto overflow-auto no-scroll">
+            <QuestionListTable className="" questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
+          </div>
+
+          <nav className="lg:mx-3 right-5 font-semibold text-lg mx-5 lg:sticky lg:top-0">
             <div className="w-full border-2 border-primary-800 rounded-xl p-4 bg-primary-100 flex flex-col gap-2">
               <h1 className="text-center">Download Question Bundle</h1>
               <h2 className="text-center text-base font-normal">Midterm 1 + Midterm 2 + Semester Final</h2>
@@ -226,8 +230,6 @@ export default function SearchResult() {
                 })}
             </div>
           </nav>
-
-          <QuestionListTable questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
         </>
       )}
     </div>

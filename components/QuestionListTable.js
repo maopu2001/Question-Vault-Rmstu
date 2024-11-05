@@ -26,7 +26,7 @@ const EditorIcon = (
   </svg>
 );
 
-export default function QuestionListTable({ questionList, setQuestionList, editor }) {
+export default function QuestionListTable({ className, questionList, setQuestionList, editor }) {
   const [preview, setPreview] = useState(false);
   const [pages, setPages] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,7 +73,7 @@ export default function QuestionListTable({ questionList, setQuestionList, edito
   };
 
   return (
-    <div className="md:w-[40%] w-[95%] grid grid-cols-1 gap-4 my-4 mx-auto">
+    <div className={`${className} md:w-full w-[95%] space-y-4 mb-4 mx-auto`}>
       {isLoading && <Loading />}
       {questionList?.length < 1 && <h1 className="text-center text-2xl font-bold">No Question Found</h1>}
       {questionList?.length > 0 &&
