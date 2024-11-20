@@ -34,7 +34,7 @@ export async function POST(req) {
       path: '/',
     };
 
-    cookies().set('token', token, cookieOptions);
+    (await cookies()).set('token', token, cookieOptions);
 
     const role = await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET);
 
@@ -43,7 +43,7 @@ export async function POST(req) {
       path: '/',
     };
 
-    cookies().set('role', role, nonHttpCookieOptions);
+    (await cookies()).set('role', role, nonHttpCookieOptions);
     return NextResponse.json({ message: 'Login successful' }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ message: err.message || 'Something went wrong' }, { status: 500 });

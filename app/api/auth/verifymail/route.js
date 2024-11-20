@@ -48,7 +48,7 @@ export async function POST(req) {
         path: '/',
       };
       await TempAuth.deleteOne({ email: tempAuth.email });
-      cookies().set('passChangeToken', passChangeToken, cookieOptions);
+      (await cookies()).set('passChangeToken', passChangeToken, cookieOptions);
       return NextResponse.json({ message: 'Verification successful', type: 'passwordChangeRequest' }, { status: 200 });
     } else {
       const newUser = new User({ name, username, email, degree, faculty, department, session });

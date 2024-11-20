@@ -5,7 +5,7 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
-    const headersList = headers();
+    const headersList = await headers();
     const token = headersList.get('SuperAdmin-Token');
     if (!token || token !== process.env.SUPER_ADMIN_TOKEN) {
       return NextResponse.json({ error: 'Invalid superadmin token' }, { status: 400 });
@@ -22,7 +22,7 @@ export async function GET() {
 
 export async function DELETE() {
   try {
-    const headersList = headers();
+    const headersList = await headers();
     const token = headersList.get('SuperAdmin-Token');
     if (!token || token !== process.env.SUPER_ADMIN_TOKEN) {
       return NextResponse.json({ error: 'Invalid superadmin token' }, { status: 400 });

@@ -2,7 +2,8 @@ import connectMongo from '@/mongoDB/connectMongo';
 import { File, QuesInfo } from '@/mongoDB/indexSchema';
 import { NextResponse } from 'next/server';
 
-export async function GET(req, { params }) {
+export async function GET(req, props) {
+  const params = await props.params;
   try {
     await connectMongo();
     const quesInfo = await QuesInfo.findById(params.quesId);

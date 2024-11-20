@@ -31,7 +31,7 @@ export async function GET(req) {
       path: '/',
     };
 
-    cookies().set('token', newToken, cookieOptions);
+    (await cookies()).set('token', newToken, cookieOptions);
 
     await jwtSign({ role: auth.role }, process.env.NEXT_PUBLIC_JWT_SECRET);
 
