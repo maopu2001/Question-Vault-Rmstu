@@ -24,6 +24,10 @@ export async function GET(req) {
       })
       .populate('createdBy');
 
+    if (filteredQuesInfoList.length < 1) {
+      return NextResponse.json({ message: 'No questions found' }, { status: 404 });
+    }
+
     return NextResponse.json({ data: filteredQuesInfoList }, { status: 200 });
   } catch (err) {
     return NextResponse.json({ faculty: [], department: [], degree: [], semester: [] }, { status: 500 });
