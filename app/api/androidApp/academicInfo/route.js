@@ -3,11 +3,10 @@ import { Degree, Department, Faculty, QuesInfo, Semester } from '@/mongoDB/index
 import { NextResponse } from 'next/server';
 
 export async function GET(req) {
-  const searchParams = new URL(req.url).searchParams || '';
-  console.log(searchParams);
+  const searchParams = new URL(req.url)?.searchParams;
   try {
     await connectMongo();
-    if (searchParams === '') {
+    if (searchParams.toString() === '') {
       const faculty = (await Faculty.find()) || [];
       const department = (await Department.find().populate('faculty')) || [];
       const degree = (await Degree.find().populate('faculty')) || [];
@@ -30,8 +29,6 @@ export async function GET(req) {
           exam: 1,
         })
         .populate('createdBy');
-      
-      
 
       return NextResponse.json({ data: filteredQuesInfoList }, { status: 200 });
     }
