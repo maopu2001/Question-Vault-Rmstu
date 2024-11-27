@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import jwtVerify from './lib/jwtVerify';
 
 export async function middleware(req) {
-  const publicPaths = ['/about'];
+  const publicPaths = ['/about', '/ExamQuestionsRMSTU.apk'];
   const adminPaths = ['/admin'];
   const superadminPaths = ['/superadmin'];
 
