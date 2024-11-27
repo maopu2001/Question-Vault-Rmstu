@@ -13,7 +13,7 @@ export async function GET(req) {
     const semester = searchParams.get('semester') || '';
 
     if (faculty === '' || department === '' || degree === '' || semester === '') {
-      return NextResponse.json({ message: 'All search parameters must be provided' }, { status: 400 });
+      return NextResponse.json({ data: [] }, { status: 400 });
     }
 
     const filteredQuesInfoList = await QuesInfo.find({ faculty, department, degree, semester })
@@ -25,11 +25,31 @@ export async function GET(req) {
       .populate('createdBy');
 
     if (filteredQuesInfoList.length < 1) {
-      return NextResponse.json({ message: 'No questions found' }, { status: 404 });
+      return NextResponse.json({ data: [] }, { status: 404 });
     }
 
-    return NextResponse.json({ data: filteredQuesInfoList }, { status: 200 });
+    const courses = await QuesInfo.find({ faculty, department, degree, semester }).select('course');
+    const sortedCourses = courses.sort((a, b) => {
+      const numA = parseInt(a.course.match(/\d+/)[0], 10);
+      const numB = parseInt(b.course.match(/\d+/)[0], 10);
+      return numA - numB;
+    });
+    const uniqueCourses = [...new Set(sortedCourses.map((course) => course.course))];
+
+    const sessions = await QuesInfo.find({ faculty, department, degree, semester }).select('session');
+    const sortedSessions = sessions.sort((a, b) => a.session - b.session);
+    const uniqueSessions = [...new Set(sortedSessions.map((session) => session.session))];
+
+    const exams = await QuesInfo.find({ faculty, department, degree, semester }).select('exam');
+    const sortedExams = exams.sort((a, b) => a.exam - b.exam);
+    const uniqueExams = [...new Set(sortedExams.map((exam) => exam.exam))];
+
+    return NextResponse.json(
+      { data: filteredQuesInfoList, courses: uniqueCourses, sessions: uniqueSessions, exams: uniqueExams },
+      { status: 200 }
+    );
   } catch (err) {
-    return NextResponse.json({ faculty: [], department: [], degree: [], semester: [] }, { status: 500 });
+    console.log(err);
+    return NextResponse.json({ data: [] }, { status: 500 });
   }
 }
