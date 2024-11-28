@@ -83,34 +83,34 @@ export default function QuestionListTable({ className, questionList, setQuestion
               <div className="relative flex flex-col gap-5">
                 <div className="w-full border-2 border-primary-800 px-4 py-2 rounded-lg">
                   <h1 className="font-bold w-fit mb-2 shadow-lg px-6 py-2 rounded-xl">Question Information</h1>
-                  <table key={i}>
+                  <table key={i} className='mr-6'>
                     <tbody>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Department:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Department:</th>
                         <td>{ques.department}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Degree:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Degree:</th>
                         <td>{ques.degree}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Semester:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Semester:</th>
                         <td>{ques.semester}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Course:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Course:</th>
                         <td>{ques.course}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Exam:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Exam:</th>
                         <td>{ques.exam}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Session:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Session:</th>
                         <td>{ques.session}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Total Page:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Total Page:</th>
                         <td>{ques.fileList.length}</td>
                       </tr>
                     </tbody>
@@ -121,31 +121,31 @@ export default function QuestionListTable({ className, questionList, setQuestion
                     <tbody>
                       <tr>
                         <th colSpan={2}>
-                          <h1 className="font-bold w-fit mb-2 shadow-lg px-6 py-2 rounded-xl">Upload Information</h1>
+                          <h1 className="font-bold w-fit mb-2 shadow-lg px-6 py-2 rounded-xl">Uploader Information</h1>
                         </th>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Name:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Name:</th>
                         <td>{ques.createdBy.name}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Department:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Department:</th>
                         <td>{ques.createdBy.department}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Session:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Session:</th>
                         <td>{ques.createdBy.session}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Degree Type:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Degree Type:</th>
                         <td>{ques.createdBy.degree}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Created At:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Created At:</th>
                         <td>{convertUSTtoBST(ques.createdAt)}</td>
                       </tr>
                       <tr>
-                        <th className="text-nowrap text-right pr-2">Updated At:</th>
+                        <th className="text-nowrap pr-3 flex justify-end">Updated At:</th>
                         <td>{convertUSTtoBST(ques.updatedAt)}</td>
                       </tr>
                     </tbody>

@@ -65,6 +65,12 @@ const ProfileIcon = (
   </svg>
 );
 
+const andoidIcon = (
+  <svg width="36px" xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="#ffffff">
+    <path d="M40-240q9-107 65.5-197T256-580l-74-128q-6-9-3-19t13-15q8-5 18-2t16 12l74 128q86-36 180-36t180 36l74-128q6-9 16-12t18 2q10 5 13 15t-3 19l-74 128q94 53 150.5 143T920-240H40Zm240-110q21 0 35.5-14.5T330-400q0-21-14.5-35.5T280-450q-21 0-35.5 14.5T230-400q0 21 14.5 35.5T280-350Zm400 0q21 0 35.5-14.5T730-400q0-21-14.5-35.5T680-450q-21 0-35.5 14.5T630-400q0 21 14.5 35.5T680-350Z" />
+  </svg>
+);
+
 export default function Header() {
   const [sideBarRendered, setSideBarRendered] = useState(false);
   const [role, setRole] = useState('');
@@ -83,9 +89,17 @@ export default function Header() {
   }, [role]);
 
   const toggleSideBar = () => {
-    setSideBarRendered((p) => !p);
-    const sidebar = document.querySelector('#sidebar');
-    if (sidebar) sidebar.classList.toggle('open');
+    setSideBarRendered((p) => {
+      const sidebar = document.querySelector('#sidebar');
+      if (!p) {
+        sidebar.classList.add('open');
+        sidebar.style.animation = 'slideIn 0.3s ease-in';
+      } else {
+        sidebar.classList.remove('open');
+        sidebar.style.animation = 'slideOut 0.3s ease-in';
+      }
+      return !p;
+    });
   };
 
   const logout = async () => {
@@ -132,67 +146,73 @@ export default function Header() {
       >
         {MenuIcon}
       </button>
-      {sideBarRendered && (
-        <nav
-          id="sidebar"
-          className="fixed z-30 pt-20 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg open"
+
+      <nav
+        id="sidebar"
+        className="fixed z-30 pt-20 lg:hidden sm:w-[300px] w-screen bg-primary-800 h-screen px-10 flex flex-col items-center gap-4 font-semibold text-lg"
+      >
+        <ul className="flex flex-col items-end gap-4 list-none *:w-full">
+          {role === '' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
+              {HomeIcon} Home
+            </Link>
+          )}
+          {role === 'admin' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/dashboard">
+              {DashboardIcon} Dashboard
+            </Link>
+          )}
+          {role === 'superadmin' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/dashboard">
+              {DashboardIcon} Dashboard
+            </Link>
+          )}
+          {role !== '' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/searchQuestion">
+              {SearchIcon} Search Questions
+            </Link>
+          )}
+          {(role === 'admin' || role === 'superadmin') && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/question/info">
+              {CreateIcon} Create Questions
+            </Link>
+          )}
+          {role === 'superadmin' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/AcademicInfoEditor">
+              {EditorIcon} Academic Information
+            </Link>
+          )}
+          {role === '' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/login">
+              {LoginIcon} Login
+            </Link>
+          )}
+          {role === '' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/signup">
+              {SignupIcon} Signup
+            </Link>
+          )}
+
+          {role !== '' && (
+            <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/profile">
+              {ProfileIcon}Profile
+            </Link>
+          )}
+
+          {role !== '' && (
+            <Link onClick={logout} className="flex items-center gap-2" href="">
+              {LogoutIcon} Logout
+            </Link>
+          )}
+        </ul>
+        <a
+          className="absolute bottom-10 flex items-center justify-center gap-2 hover:px-5"
+          href="https://raw.githubusercontent.com/maopu2001/ExamQuestionRepoRmstu/refs/heads/master/public/ExamQuestionsRMSTU.apk"
+          download
         >
-          <ul className="flex flex-col items-end gap-4 list-none *:w-full">
-            {role === '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/">
-                {HomeIcon} Home
-              </Link>
-            )}
-            {role === 'admin' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/dashboard">
-                {DashboardIcon} Dashboard
-              </Link>
-            )}
-            {role === 'superadmin' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/dashboard">
-                {DashboardIcon} Dashboard
-              </Link>
-            )}
-            {role !== '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/searchQuestion">
-                {SearchIcon} Search Questions
-              </Link>
-            )}
-            {(role === 'admin' || role === 'superadmin') && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/admin/question/info">
-                {CreateIcon} Create Questions
-              </Link>
-            )}
-            {role === 'superadmin' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/superadmin/AcademicInfoEditor">
-                {EditorIcon} Academic Information
-              </Link>
-            )}
-            {role === '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/login">
-                {LoginIcon} Login
-              </Link>
-            )}
-            {role === '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/signup">
-                {SignupIcon} Signup
-              </Link>
-            )}
-
-            {role !== '' && (
-              <Link onClick={toggleSideBar} className="flex items-center gap-2" href="/profile">
-                {ProfileIcon}Profile
-              </Link>
-            )}
-
-            {role !== '' && (
-              <Link onClick={logout} className="flex items-center gap-2" href="">
-                {LogoutIcon} Logout
-              </Link>
-            )}
-          </ul>
-        </nav>
-      )}
+          {andoidIcon} Download App
+        </a>
+      </nav>
     </header>
   );
 }
