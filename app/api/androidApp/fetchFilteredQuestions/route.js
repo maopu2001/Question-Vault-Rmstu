@@ -22,7 +22,7 @@ export async function GET(req) {
         session: 1,
         exam: 1,
       })
-      .populate('createdBy');
+      .populate('createdBy', 'name username email degree faculty department session');
 
     if (filteredQuesInfoList.length < 1) {
       return NextResponse.json({ data: [] }, { status: 404 });
