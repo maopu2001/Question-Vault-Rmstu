@@ -16,7 +16,7 @@ export async function POST(req) {
         session: 1,
         exam: 1,
       })
-      .populate('createdBy');
+      .populate('createdBy', '-profileImg');
 
     return NextResponse.json({ data: filteredQuesInfoList }, { status: 200 });
   } catch (error) {

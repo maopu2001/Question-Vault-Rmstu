@@ -12,10 +12,10 @@ export async function GET(req) {
 
     let filteredUsers;
     if (role !== 'request') {
-      const filteredAuth = await Auth.find({ role }).populate('user');
+      const filteredAuth = await Auth.find({ role }).populate('user', '-profileImg');
       filteredUsers = filteredAuth.map((auth) => auth.user);
     } else {
-      const filteredAuth = await Auth.find({ accessrequest: true }).populate('user');
+      const filteredAuth = await Auth.find({ accessrequest: true }).populate('user', '-profileImg');
       filteredUsers = filteredAuth.map((auth) => auth.user);
     }
 

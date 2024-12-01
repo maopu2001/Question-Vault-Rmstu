@@ -32,13 +32,13 @@ export async function GET(req) {
     await connectMongo();
     if (token) {
       const payload = await jwtVerify(token, process.env.JWT_SECRET);
-      auth = await Auth.findById(payload.id).populate('user');
+      auth = await Auth.findById(payload.id).populate('user', '-profileImg');
     } else {
       email = req.nextUrl.searchParams.get('email');
       if (!email) return NextResponse.json({ message: 'Bad Request' }, { status: 400 });
       const user = await User.findOne({ email: email });
       if (!user) return NextResponse.json({ message: 'User not found' }, { status: 404 });
-      auth = await Auth.findOne({ user: user._id }).populate('user');
+      auth = await Auth.findOne({ user: user._id }).populate('user', '-profileImg');
     }
 
     if (!auth) return NextResponse.json({ message: 'User not found' }, { status: 404 });

@@ -17,11 +17,14 @@ export async function POST(req) {
     await connectMongo();
     const payload = await jwtVerify(token, process.env.JWT_SECRET);
     if (!payload) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
-    const auth = await Auth.findById(payload.id).populate('user');
+    const auth = await Auth.findById(payload.id).populate('user', '-profileImg');
     if (!auth) return NextResponse.json({ message: `No creator's Id found` }, { status: 404 });
     const userId = auth.user._id;
 
-    const quesInfo = await QuesInfo.findById(id).populate('createdBy');
+    const quesInfo = await QuesInfo.findById(id).populate(
+      'createdBy',
+      'name username email degree faculty department session'
+    );
     if (!quesInfo) return NextResponse.json({ message: 'No question found.' }, { status: 404 });
 
     if (String(userId) !== String(quesInfo.createdBy._id)) {

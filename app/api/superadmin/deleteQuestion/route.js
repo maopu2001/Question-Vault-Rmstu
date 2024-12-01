@@ -14,7 +14,9 @@ export async function DELETE(req) {
       await DeletedFile.create({ deleteUrl: fileInfo.deleteUrl });
     }
 
-    const quesInfoList = await QuesInfo.find({}).sort({ semester: 1, session: 1, exam: 1 }).populate('createdBy');
+    const quesInfoList = await QuesInfo.find({})
+      .sort({ semester: 1, session: 1, exam: 1 })
+      .populate('createdBy', '-profileImg');
 
     if (!quesInfoList || quesInfoList.length < 1)
       return NextResponse.json({ data: [], message: 'Question Deleted successfully' }, { status: 200 });

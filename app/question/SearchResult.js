@@ -30,6 +30,7 @@ export default function SearchResult() {
   const [filterdQuestions, setFilteredQuestions] = useState(questionList);
   const [courses, setCourses] = useState([]);
   const [sessions, setSessions] = useState([]);
+  const [exams, setExams] = useState([]);
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [filteredExams, setFilteredExams] = useState([]);
   const [filteredCourses, setFilteredCourses] = useState([]);
@@ -45,52 +46,37 @@ export default function SearchResult() {
     })
       .then((res) => res.json())
       .then((resData) => {
-        setQuestionList(resData.data);
-        setFilteredQuestions(resData.data);
+        //Set Questions
+        const questions = resData.data;
+        setQuestionList(questions);
+        setFilteredQuestions(questions);
+
+        //Set Courses
+        const courses = [...new Set(questions.map((question) => question.course))].sort(
+          (a, b) => a.match(/\d+/)[0] - b.match(/\d+/)[0]
+        );
+        setCourses(courses);
+
+        //Set Sessions
+        const sessions = [...new Set(questions.map((question) => question.session))].sort(
+          (a, b) => a.match(/\d{4}/)[0] - b.match(/\d{4}/)[0]
+        );
+        setSessions(sessions);
+
+        //Set Exams
+        const exams = [...new Set(questions.map((question) => question.exam))].sort();
+        setExams(exams);
+
         setIsLoading(false);
       })
       .catch(() => {
         setQuestionList([]);
+        setFilteredQuestions([]);
+        setCourses([]);
+        setSessions([]);
+        setExams([]);
         setIsLoading(false);
       });
-  }, []);
-
-  //setting courses
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=course');
-        const resData = await res.json();
-        const data = resData.data.reduce((acc, item) => {
-          if (
-            item.semester.semester === payload.semester &&
-            item.semester.degree.degreeCode === payload.degree &&
-            item.department.departmentTitle === payload.department
-          )
-            acc.push(`${item.courseTitle} (${item.courseCode})`);
-          return acc;
-        }, []);
-
-        setCourses(data);
-      } catch (error) {
-        setCourses([]);
-      }
-    };
-    fetchCourses();
-  }, [payload.degree, payload.department, payload.semester]);
-
-  //setting sessions
-  useEffect(() => {
-    const fetchSessions = async () => {
-      try {
-        const res = await fetch('/api/superadmin/AcademicInfoEditor?id=session');
-        const resData = await res.json();
-        setSessions(resData.data);
-      } catch (error) {
-        setSessions([]);
-      }
-    };
-    fetchSessions();
   }, []);
 
   //filter Questions
@@ -119,7 +105,7 @@ export default function SearchResult() {
 
   const examData = {
     label: 'Exam',
-    arr: ['Midterm - 1', 'Midterm - 2', 'Semester Final'],
+    arr: exams,
     setFilteredArr: setFilteredExams,
   };
 
@@ -136,13 +122,19 @@ export default function SearchResult() {
     const fileIdList = {
       mid1: filteredQuestionList
         .filter((ques) => ques.exam === 'Midterm - 1')
-        .map((ques) => ques.fileList.map((file) => file.id)),
+        .sort((a, b) => a.course.match(/\d+/)[0] - b.course.match(/\d+/)[0])
+        .map((ques) => ques.fileList.sort((a, b) => a.pageNo - b.pageNo).map((file) => file.id))
+        .flat(),
       mid2: filteredQuestionList
         .filter((ques) => ques.exam === 'Midterm - 2')
-        .map((ques) => ques.fileList.map((file) => file.id)),
+        .sort((a, b) => a.course.match(/\d+/)[0] - b.course.match(/\d+/)[0])
+        .map((ques) => ques.fileList.sort((a, b) => a.pageNo - b.pageNo).map((file) => file.id))
+        .flat(),
       final: filteredQuestionList
         .filter((ques) => ques.exam === 'Semester Final')
-        .map((ques) => ques.fileList.map((file) => file.id)),
+        .sort((a, b) => a.course.match(/\d+/)[0] - b.course.match(/\d+/)[0])
+        .map((ques) => ques.fileList.sort((a, b) => a.pageNo - b.pageNo).map((file) => file.id))
+        .flat(),
     };
 
     try {
@@ -253,7 +245,7 @@ export default function SearchResult() {
             </div>
           </nav>
 
-          <div className="lg:col-span-2 lg:order-2 mx-auto overflow-auto no-scroll w-full">
+          <div className="lg:col-span-2 lg:order-2 mx-auto overflow-auto w-full">
             <QuestionListTable className="" questionList={filterdQuestions} setQuestionList={setFilteredQuestions} />
           </div>
         </>

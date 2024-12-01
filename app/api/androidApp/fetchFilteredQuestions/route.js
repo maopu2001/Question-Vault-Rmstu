@@ -22,27 +22,24 @@ export async function GET(req) {
         session: 1,
         exam: 1,
       })
-      .populate('createdBy', 'name username email degree faculty department session');
+      .populate('createdBy', '-profileImg');
 
     if (filteredQuesInfoList.length < 1) {
       return NextResponse.json({ data: [] }, { status: 404 });
     }
 
     const courses = await QuesInfo.find({ faculty, department, degree, semester }).select('course');
-    const sortedCourses = courses.sort((a, b) => {
-      const numA = parseInt(a.course.match(/\d+/)[0], 10);
-      const numB = parseInt(b.course.match(/\d+/)[0], 10);
-      return numA - numB;
-    });
-    const uniqueCourses = [...new Set(sortedCourses.map((course) => course.course))];
+    const uniqueCourses = [...new Set(courses.map((course) => course.course))].sort(
+      (a, b) => a.match(/\d+/)[0] - b.match(/\d+/)[0]
+    );
 
     const sessions = await QuesInfo.find({ faculty, department, degree, semester }).select('session');
-    const sortedSessions = sessions.sort((a, b) => a.session - b.session);
-    const uniqueSessions = [...new Set(sortedSessions.map((session) => session.session))];
+    const uniqueSessions = [...new Set(sessions.map((session) => session.session))].sort(
+      (a, b) => a.match(/\d{4}/)[0] - b.match(/\d{4}/)[0]
+    );
 
     const exams = await QuesInfo.find({ faculty, department, degree, semester }).select('exam');
-    const sortedExams = exams.sort((a, b) => a.exam - b.exam);
-    const uniqueExams = [...new Set(sortedExams.map((exam) => exam.exam))];
+    const uniqueExams = [...new Set(exams.map((exam) => exam.exam))].sort();
 
     return NextResponse.json(
       { data: filteredQuesInfoList, courses: uniqueCourses, sessions: uniqueSessions, exams: uniqueExams },
