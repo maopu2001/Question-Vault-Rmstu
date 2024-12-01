@@ -204,14 +204,15 @@ export default function Header() {
               {LogoutIcon} Logout
             </Link>
           )}
+
+          <a
+            className="mt-24 flex py-2 items-center justify-center gap-2 hover:scale-110 border rounded-xl"
+            href="https://raw.githubusercontent.com/maopu2001/ExamQuestionRepoRmstu/refs/heads/master/public/ExamQuestionsRMSTU.apk"
+            download
+          >
+            {andoidIcon} Download App
+          </a>
         </ul>
-        <a
-          className="absolute bottom-10 flex items-center justify-center gap-2 hover:px-5"
-          href="https://raw.githubusercontent.com/maopu2001/ExamQuestionRepoRmstu/refs/heads/master/public/ExamQuestionsRMSTU.apk"
-          download
-        >
-          {andoidIcon} Download App
-        </a>
       </nav>
     </header>
   );
