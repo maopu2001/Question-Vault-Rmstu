@@ -37,7 +37,7 @@ export async function POST(req) {
     try {
       sendMail(
         email,
-        'Verify - Exam Question Dump Rmstu',
+        'Verify - Question Vault Rmstu',
         `${req.nextUrl.origin}/emailverification/${newTempAuth._id}`,
         randomNumber
       );

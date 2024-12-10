@@ -1,7 +1,7 @@
 import SearchResult from './SearchResult.js';
 
 export const metadata = {
-  title: 'Questions - Exam Question Repo RMSTU',
+  title: 'Questions - Question Vault RMSTU',
 };
 
 export default function page() {

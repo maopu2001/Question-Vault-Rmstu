@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Unauthorized - Exam Question Repo RMSTU',
+  title: 'Unauthorized - Question Vault RMSTU',
 };
 
 export default function Unauthorized() {

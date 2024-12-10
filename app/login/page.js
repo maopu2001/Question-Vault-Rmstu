@@ -1,7 +1,7 @@
 import LogInForm from '@/app/login/LogInForm';
 
 export const metadata = {
-  title: 'Log In - Exam Question Repo RMSTU',
+  title: 'Log In - Question Vault RMSTU',
 };
 
 export default function LogIn() {

@@ -1,7 +1,7 @@
 import FacultyEditor from './FacultyEditor';
 
 export const metadata = {
-  title: 'Faculty Editor - Exam Question Repo RMSTU',
+  title: 'Faculty Editor - Question Vault RMSTU',
 };
 
 export default function FacultyEditorPage() {

@@ -1,7 +1,7 @@
 import ChangePassword from './ChangePassword';
 
 export const metadata = {
-  title: 'Change Password - Exam Question Repo RMSTU',
+  title: 'Change Password - Question Vault RMSTU',
 };
 
 export default function ChangePasswordPage() {

@@ -1,7 +1,7 @@
 import QuesInfoForm from '@/app/admin/question/info/QuestionInfoForm';
 
 export const metadata = {
-  title: "Question's Information - Exam Question Repo RMSTU",
+  title: "Question's Information - Question Vault RMSTU",
 };
 
 export default function New() {

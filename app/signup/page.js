@@ -1,7 +1,7 @@
 import SignUpForm from './SignUpForm';
 
 export const metadata = {
-  title: 'Sign Up - Exam Question Repo RMSTU',
+  title: 'Sign Up - Question Vault RMSTU',
 };
 
 export default function SignUp() {

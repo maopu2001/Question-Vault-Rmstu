@@ -5,8 +5,8 @@ import './globals.css';
 import GoToTopBtn from '@/components/GoToTopBtn';
 
 export const metadata = {
-  title: 'Exam Question Repo RMSTU',
-  description: 'A Exam Question Dump for RMSTU Students. Here all previous year questions can be found',
+  title: 'Question Vault RMSTU',
+  description: 'A Question Vault for RMSTU Students. Here all previous year questions can be found',
 };
 
 export default function RootLayout({ children }) {

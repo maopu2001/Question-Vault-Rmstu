@@ -1,7 +1,7 @@
 import DepartmentEditor from './DepartmentEditor';
 
 export const metadata = {
-  title: 'Department Editor - Exam Question Repo RMSTU',
+  title: 'Department Editor - Question Vault RMSTU',
 };
 
 export default function DepartmentEditorPage() {

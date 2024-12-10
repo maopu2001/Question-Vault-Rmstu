@@ -1,7 +1,7 @@
 import SemesterEditor from './SemesterEditor';
 
 export const metadata = {
-  title: 'Semester Editor - Exam Question Repo RMSTU',
+  title: 'Semester Editor - Question Vault RMSTU',
 };
 
 export default function SemesterEditorPage() {

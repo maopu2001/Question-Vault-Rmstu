@@ -1,7 +1,7 @@
 import QuestionUpload from './QuestionUpload';
 
 export const metadata = {
-  title: 'Question Upload - Exam Question Repo RMSTU',
+  title: 'Question Upload - Question Vault RMSTU',
 };
 
 export default async function Upload(props) {

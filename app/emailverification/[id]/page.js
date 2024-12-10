@@ -1,7 +1,7 @@
 import EmailVerification from './EmailVerification';
 
 export const metadata = {
-  title: 'Email Verification - Exam Question Repo RMSTU',
+  title: 'Email Verification - Question Vault RMSTU',
 };
 
 export default async function EmailVerificationPage(props) {

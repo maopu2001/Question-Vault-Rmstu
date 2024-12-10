@@ -1,7 +1,7 @@
 import CourseEditor from './CourseEditor';
 
 export const metadata = {
-  title: 'Course Editor - Exam Question Repo RMSTU',
+  title: 'Course Editor - Question Vault RMSTU',
 };
 
 export default function CourseEditorPage() {
