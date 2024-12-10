@@ -11,7 +11,7 @@ export default function Footer() {
     <div className="fixed bottom-0 w-full h-8 flex items-center justify-center bg-primary-800 text-white text-sm">
       © Copyright 2024 | M. Aktaruzzaman Opu | &nbsp;
       <Link
-        href="https://github.com/maopu2001/ExamQuestionRepoRmstu"
+        href="https://github.com/maopu2001/Question-Vault-Rmstu"
         target="_blank"
         className="*:hover:fill-secondary-400 w-6"
       >

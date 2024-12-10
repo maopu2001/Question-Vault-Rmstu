@@ -120,7 +120,7 @@ export default function Header() {
 
   return (
     <header className="fixed h-20 w-full flex items-center justify-center md:justify-start bg-primary-800 text-white p-4 top-0 z-10">
-      <h1 className="select-none text-2xl font-bold md:ml-12 p-2 rounded-md">Question Vault</h1>
+      <h1 className="select-none text-2xl font-bold md:ml-12 p-2 rounded-md">Question Vault RMSTU</h1>
       <nav className="lg:flex *:w-[1fr] *:mx-3 absolute right-10 hidden justify-center items-center font-semibold text-lg">
         {role === '' && <Link href="/">Home</Link>}
         {role === 'admin' && <Link href="/admin/dashboard">Dashboard</Link>}
@@ -207,7 +207,7 @@ export default function Header() {
 
           <a
             className="mt-24 flex py-2 items-center justify-center gap-2 hover:scale-110 border rounded-xl"
-            href="https://raw.githubusercontent.com/maopu2001/ExamQuestionRepoRmstu/refs/heads/master/public/ExamQuestionsRMSTU.apk"
+            href="https://raw.githubusercontent.com/maopu2001/Question-Vault-Rmstu/refs/heads/master/public/ExamQuestionsRMSTU.apk"
             download
           >
             {andoidIcon} Download App
