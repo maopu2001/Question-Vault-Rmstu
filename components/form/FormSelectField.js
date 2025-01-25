@@ -20,7 +20,7 @@ export default function FormSelectField({ formControl, data }) {
                 <SelectValue placeholder={placeholder} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent className="max-h-[200px]">
               {arr.map((value) => (
                 <SelectItem key={value} value={value}>
                   {value}
